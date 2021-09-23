@@ -21,6 +21,8 @@ function Juego(){
         };
         var partida = new Partida(codigo,jugador,numJug);
         this.partidas[codigo]=partida;
+
+        return partida;
         
     }
 
@@ -43,6 +45,10 @@ function Juego(){
         return codigo.join('');
      }   
 
+     this.numeroPartidas=function(){
+		return Object.keys(this.partidas).length;
+	}
+
     function randomInt(low, high) {
         return Math.floor(Math.random() * (high - low) + low);
     }
@@ -54,7 +60,7 @@ function Jugador(nick,juego){
     this.nick=nick;
     this.juego=juego;
     this.crearPartida=function(numJug){
-        this.juego.crearPartida(nick, numJug);
+       return this.juego.crearPartida(nick, numJug);
     }
     this.unirAPartida=function(codigo){
         this.juego.unirAPartida(codigo,nick);
@@ -91,6 +97,9 @@ function Inicial(){
             partida.fase=new Jugando();
         }
 
+    }
+    this.esInicial=function(){
+        return true;
     }
 
 }
