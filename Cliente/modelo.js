@@ -101,6 +101,7 @@ function Partida(codigo,jugador,numJug){
 
 //Constructor que indica el estado previo al comienzo de la partida (sala de espera)
 function Inicial(){
+    this.nombre="iniciar";
     this.unirAPartida=function(partida,jugador){
         //si numero jugadores < numJug
         partida.puedeUnirAPartida(jugador);
@@ -117,6 +118,7 @@ function Inicial(){
 
 //Constructor que indica que los jugadores están jugando la partida (partida en curso)
 function Jugando(){
+    this.nombre="jugando";
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ya ha comenzado");
     }
@@ -125,6 +127,7 @@ function Jugando(){
 
 //Constructor que indica que la partida ha finalizado
 function Final(){
+    this.nombre="final";
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ya ha terminado");
     }
@@ -136,4 +139,12 @@ function Carta(color, tipo){
     this.color=color;
     this.tipo=tipo;
     this.numero;
+
+
+
+
+
+
+
+    
 }
