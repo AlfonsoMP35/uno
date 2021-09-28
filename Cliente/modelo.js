@@ -1,6 +1,11 @@
+//Constructor que crea el juego
+//Contiene: Agregación de jugadores
+//          Crearción de partidas
+//          Unirse a partidas
+//          Generar un código para la sala    
 function Juego(){
     this.usuarios={}; //Array asociativo - Nick como campo único
-    this.partidas={};
+    this.partidas={}; //Partidas como campo único
 
     this.agregarJugador=function(nick){
         if(!this.usuarios[nick]){
@@ -56,6 +61,7 @@ function Juego(){
 
 }
 
+//Constructor que identifica al jugador al crear una partida o al unirse a una
 function Jugador(nick,juego){
     this.nick=nick;
     this.juego=juego;
@@ -67,6 +73,10 @@ function Jugador(nick,juego){
     }
 }
 
+//Constructor que muestra el estado de partida creada
+//Contiene: Número de jugadores
+//          Función para unirse a la partida
+//          Función que comprueba si se puede unir a la partida
 function Partida(codigo,jugador,numJug){
     this.codigo=codigo;
     this.propietario=jugador.nick;
@@ -89,6 +99,7 @@ function Partida(codigo,jugador,numJug){
     this.unirAPartida(jugador);
 }
 
+//Constructor que indica el estado previo al comienzo de la partida (sala de espera)
 function Inicial(){
     this.unirAPartida=function(partida,jugador){
         //si numero jugadores < numJug
@@ -104,6 +115,7 @@ function Inicial(){
 
 }
 
+//Constructor que indica que los jugadores están jugando la partida (partida en curso)
 function Jugando(){
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ya ha comenzado");
@@ -111,6 +123,7 @@ function Jugando(){
 
 }
 
+//Constructor que indica que la partida ha finalizado
 function Final(){
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ya ha terminado");
@@ -118,6 +131,7 @@ function Final(){
 
 }
 
+//Constructor de la carta
 function Carta(color, tipo){
     this.color=color;
     this.tipo=tipo;
