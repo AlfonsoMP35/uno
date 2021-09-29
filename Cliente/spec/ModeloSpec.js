@@ -92,13 +92,16 @@ describe("Crear mazo", function() {
   var juego;
  
 
-  beforeEach(function() {
+ beforeEach(function() {
     juego = new Juego();
     juego.agregarJugador("ana");
-    juego.agregarJugador("pepe");
   });
 
 it("Comprobar mazo",function(){
+  var ju1=juego.usuarios["ana"];
+  var partida=ju1.crearPartida(2);
+
+
   //codigo para crear partida
   expect(partida.cartas.length).toBe(108);
       var rojo=partida.cartas.filter(function(each){
@@ -106,15 +109,15 @@ it("Comprobar mazo",function(){
       });
       expect(rojo.length).toBe(25);
       var verde=partida.cartas.filter(function(each){
-        return each.color=="rojo";
+        return each.color=="verde";
       });
       expect(verde.length).toBe(25);
       var amarillo=partida.cartas.filter(function(each){
-        return each.color=="rojo";
+        return each.color=="amarillo";
       });
       expect(amarillo.length).toBe(25);
       var azul=partida.cartas.filter(function(each){
-        return each.color=="rojo";
+        return each.color=="azul";
       });
       expect(azul.length).toBe(25);
       var comodin=partida.cartas.filter(function(each){
