@@ -11,11 +11,13 @@ describe("Crear partida", function() {
   it("ana crea una partida para 2 jugadores", function() {
     var ju1=juego.usuarios["ana"];
     expect(juego.numeroPartidas()).toEqual(0);
+    //expect(partida.obtenerTodasPartidas().length).toEqual(0);
     var partida=ju1.crearPartida(2);
     expect(juego.numeroPartidas()).toEqual(1);
     expect(partida.codigo).toBeDefined();
     expect(partida.numeroJugadores()).toEqual(1);
     expect(partida.fase.nombre).toBe("iniciar");
+  //  expect(partida.obtenerTodasPartidas().length).toEqual(1);
 
   });
 
@@ -121,11 +123,11 @@ it("Comprobar mazo",function(){
       });
       expect(azul.length).toBe(25);
       var comodin=partida.cartas.filter(function(each){
-        return each.tipo=="comodin";
+        return each.color=="comodin";
       });
       expect(comodin.length).toBe(4);
       var comodin4=partida.cartas.filter(function(each){
-        return each.tipo=="comodin4";
+        return each.color=="comodin4";
       });
       expect(comodin4.length).toBe(4);
     });

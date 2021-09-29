@@ -21,15 +21,27 @@ function Juego(){
         var codigo = "-1"; 
         var jugador = this.usuarios[nick];   
         codigo = this.obtenerCodigo();    
-        while(this.partidas[codigo]){
+      /*  while(this.partidas[codigo]){
             codigo = this.obtenerCodigo();
-        };
+        };*/
         var partida = new Partida(codigo,jugador,numJug);
         this.partidas[codigo]=partida;
 
         return partida;
         
     }
+
+    this.obtenerTodasPartidas=function(){
+        var lista=[];
+
+        for(each in this.partidas){
+            var partida=this.partidas[each];
+            lista.push({propietario:partida.propietario,codigo:each});
+        }
+
+        return lista;
+    }
+
 
     this.unirAPartida=function(codigo,nick){
         if(this.partidas[codigo]){
@@ -40,14 +52,15 @@ function Juego(){
     }
     
     this.obtenerCodigo=function(){
-        let cadena="ABCDEFGHIJKLMNOPQRSTUVXYZ";
+       /* let cadena="ABCDEFGHIJKLMNOPQRSTUVXYZ";
         let letras=cadena.split('');
         let maxCadena=cadena.length;
         let codigo=[];
          for(i=0;i<6;i++){
             codigo.push(letras[randomInt(1,maxCadena)-1]);
         }
-        return codigo.join('');
+        return codigo.join('');*/
+        return Date.now().toString();
      }   
 
      this.numeroPartidas=function(){
@@ -114,62 +127,61 @@ function Partida(codigo,jugador,numJug){
 		return Object.keys(this.jugadores).length;
 	}
 
+    this.crearMazo=function(){
+        var colores=["azul","amarillo","rojo","verde"];
+
+        //Cartas 0
+        for(i=0; i<colores.length;i++){
+            this.cartas.push(new Numero(0,colores[i]));
+        }
+
+        //Cartas numericas 1-9
+        for(x=0;x<2;x++){
+            for(j=1;j<10;j++){
+                for(i=0; i<colores.length;i++){
+                    this.cartas.push(new Numero(j,colores[i]));
+                }
+            }
+        }
+
+        //Cartas +2
+        for(x=0;x<2;x++){
+            for(i=0; i<colores.length;i++){
+                 this.cartas.push(new Numero(20,colores[i]));
+            }           
+        }
+
+        //Cartas bloqueo
+            for(x=0;x<2;x++){
+                for(i=0; i<colores.length;i++){
+                     this.cartas.push(new Numero(20,colores[i]));
+                }           
+            }
+
+        //Cartas Reversa/Cambio de sentido
+        for(x=0;x<2;x++){
+            for(i=0; i<colores.length;i++){
+                 this.cartas.push(new Numero(20,colores[i]));
+            }           
+        }
+
+        //Cartas Comodin
+        for(i=0;i<4;i++){
+            this.cartas.push(new Numero(50,"comodin"));         
+        }
+
+         //Cartas Comodin+4
+         for(i=0;i<4;i++){
+            this.cartas.push(new Numero(50,"comodin4"));         
+        }
+
+    }
+
+     
+    this.crearMazo();
     this.unirAPartida(jugador);
 
-    //Creación del mazo  
-    //Cartas rojas
-   this.rojo=function(){
-        for(var x=0; x<25; x++){
-            var carta = new Carta("rojo",this.tipos[x]);
-            this.cartas[carta.color]=carta;
-            this.rojo[carta.color]=carta;
-        }       
-   }
-
-    //Cartas azules
-    this.azul=function(){
-        for(var x=0; x<25; x++){
-            var carta = new Carta("azul",this.tipos[x]);
-            this.cartas[carta.color]=carta;
-            this.azul[carta.color]=carta;
-        }
-    }    
-
-    //Cartas amarillas
-    this.amarillo=function(){
-        for(var x=0; x<25; x++){
-            var carta = new Carta("amarillo",this.tipos[x]);
-            this.cartas[carta.color]=carta;
-            this.amarillo[carta.color]=carta;
-        }
-    }  
-
-    //Cartas verdes
-    this.verde=function(){
-        for(var x=0; x<25; x++){
-            var carta = new Carta("verde",this.tipos[x]);
-            this.cartas[carta.color]=carta;
-            this.verde[carta.color]=carta;
-        }
-    }
-
-    //Cartas comodin
-    this.comodin=function(){
-        for(var x=0; x<4; x++){
-            var carta = new Carta("comodin",this.tiposc[x]);
-            this.cartas[carta.color]=carta;
-            this.comodin[carta.color]=carta;            
-        }
-    }
-
-    //Cartas comodin4
-    this.comodin4=function(){
-        for(var x=4; x<8; x++){
-            var carta = new Carta("comodin4",this.tiposc[x]);
-            this.cartas[carta.color]=carta;
-            this.comodin4[carta.color]=carta;
-        }
-    }
+   
     
 
 
@@ -211,11 +223,9 @@ function Final(){
 }
 
 //Objeto de la carta
-function Carta(color, tipo){
+function Numero(valor, color){
     this.color=color;
-    this.tipo=tipo;
-    this.numero;
-
+    this.valor=valor;
 
 
 
