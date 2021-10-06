@@ -150,11 +150,11 @@ it("Comprobar mazo",function(){
       });
       expect(azul.length).toBe(25);
       var comodin=partida.mazo.filter(function(each){
-        return each.color=="comodin";
+        return each.tipo=="comodin";
       });
       expect(comodin.length).toBe(4);
       var comodin4=partida.mazo.filter(function(each){
-        return each.color=="comodin4";
+        return each.tipo=="comodin4";
       });
       expect(comodin4.length).toBe(4);
     });

@@ -116,15 +116,11 @@ function Partida(codigo,jugador,numJug){
     this.numJug=numJug;
     this.jugadores={};
     this.fase=new Inicial();
+    var sentido= false; //Sentido agujas reloj
 
 
     this.mazo=[];
-    this.rojo=[];
-    this.amarillo=[];
-    this.azul=[];
-    this.verde=[];
-    this.comodin=[];
-    this.comodin4=[];
+    this.mesa=[];
     
     this.unirAPartida=function(jugador){
         this.fase.unirAPartida(this,jugador);
@@ -157,32 +153,28 @@ function Partida(codigo,jugador,numJug){
         //Cartas +2
         for(x=0;x<2;x++){
             for(i=0; i<colores.length;i++){
-                 this.mazo.push(new Numero(20,colores[i]));
+                 this.mazo.push(new Mas2(20,colores[i]));
             }           
         }
 
         //Cartas bloqueo
             for(x=0;x<2;x++){
                 for(i=0; i<colores.length;i++){
-                     this.mazo.push(new Numero(20,colores[i]));
+                     this.mazo.push(new Bloqueo(20,colores[i]));
                 }           
             }
 
         //Cartas Reversa/Cambio de sentido
         for(x=0;x<2;x++){
             for(i=0; i<colores.length;i++){
-                 this.mazo.push(new Numero(20,colores[i]));
+                 this.mazo.push(new Cambio(20,colores[i]));
             }           
         }
 
-        //Cartas Comodin
+        //Cartas Comodin y Comodin +4
         for(i=0;i<4;i++){
-            this.mazo.push(new Numero(50,"comodin"));         
-        }
-
-         //Cartas Comodin+4
-         for(i=0;i<4;i++){
-            this.mazo.push(new Numero(50,"comodin4"));         
+            this.mazo.push(new Comodin(50));   
+            this.mazo.push(new Comodin4(50));        
         }
 
     }
@@ -203,6 +195,29 @@ function Partida(codigo,jugador,numJug){
         }
         return cartas;
     }
+
+
+     //Carta inicial para comenzar a jugar
+     this.cartaInicial=function(){                   
+        this.mesa.push(this.asignarUnaCarta());
+    }
+
+    //Pasar el turno
+    this.pasarTurno=function(){      
+        if(this.sentido == false){                  //Sentido horario       
+            var aux = this.listaJugadores.shift();      
+            aux.turno = false;                          
+            this.listaJugadores.push(aux);              
+            this.listaJugadores[0].turno = true; 
+        }
+        else{                                       //Sentido antihorario
+            var aux = this.listaJugadores.shift();      
+            aux.turno = false;                          
+            this.listaJugadores.push(aux);              
+            this.listaJugadores[this.jugadores.length].turno = true;
+        }       
+    }
+
 
      
     this.crearMazo();
@@ -250,9 +265,37 @@ function Final(){
 
 }
 
-//Objeto de la carta
+//Constructores de los tipos de cartas
 function Numero(valor, color){
     this.color=color;
     this.valor=valor;
     
+}
+
+function Cambio(valor,color){
+    this.tipo="cambio";
+    this.color=color;
+    this.valor=valor;   
+}
+
+function Bloqueo(valor,color){
+    this.tipo="bloqueo";
+    this.color=color;
+    this.valor=valor;    
+}
+
+function Mas2(valor,color){
+    this.tipo="mas2";
+    this.color=color;
+    this.valor=valor;    
+}
+
+function Comodin(valor){
+    this.tipo="comodin";
+    this.valor=valor;
+}
+
+function Comodin4(valor){
+    this.tipo="comodin4";
+    this.valor=valor;
 }
