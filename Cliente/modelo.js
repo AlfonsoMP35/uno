@@ -31,13 +31,13 @@ function Juego(){
         
     }
 
-    //ERROR DETECTADO
+    
     this.obtenerTodasPartidas=function(){
         var lista=[];
 
         for(each in this.partidas){
             var partida=this.partidas[each];
-            lista.push({propietario:partida.propietario,codigo:each});
+            lista.push({propietario:partida.propietario,codigo:each})
         }
 
         return lista;
@@ -190,8 +190,9 @@ function Partida(codigo,jugador,numJug){
 
     this.asignarUnaCarta=function(){
         var maxCartas = this.mazo.length;
-        var indice = randomInt(1,maxCartas);
-        var carta=this.mazo.slice(indice,1);
+        var indice = randomInt(1,maxCartas)-1;
+        var carta=this.mazo.splice(indice,1);
+        return carta[0];
     }
 
     
@@ -205,7 +206,6 @@ function Partida(codigo,jugador,numJug){
 
      
     this.crearMazo();
-    //this.dameCartas();
     this.unirAPartida(jugador);
 
 

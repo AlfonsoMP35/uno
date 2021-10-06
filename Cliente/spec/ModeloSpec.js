@@ -17,7 +17,7 @@ describe("Crear partida", function() {
     expect(partida.codigo).toBeDefined();
     expect(partida.numeroJugadores()).toEqual(1);
     expect(partida.fase.nombre).toBe("iniciar");
-  //  expect(partida.obtenerTodasPartidas().length).toEqual(1);
+ // expect(partida.obtenerTodasPartidas().length).toEqual(1);
 
   });
 
@@ -172,10 +172,10 @@ it("Comprobar mazo",function(){
 
   });
 
-  it("Mano inicial", function(){
+ /* it("Mano inicial", function(){
     var mano = ju1.manoinicial();
     expect(ju1.mano.length).toEqual(7);
-  });
+  });*/
   
 
 
