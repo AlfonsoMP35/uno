@@ -227,7 +227,6 @@ function Partida(codigo,jugador,numJug){
    
     
 
-
 }
 
 //Objeto que indica el estado previo al comienzo de la partida (sala de espera)
@@ -298,4 +297,18 @@ function Comodin(valor){
 function Comodin4(valor){
     this.tipo="comodin4";
     this.valor=valor;
+}
+
+function Prueba(){
+    juego = new Juego();
+    juego.agregarJugador("ana");
+    ju1=juego.usuarios["ana"];
+    partida = ju1.crearPartida(2);
+    juego.agregarJugador("luis");
+    ju2=juego.usuarios["luis"];
+
+
+
+
+
 }
