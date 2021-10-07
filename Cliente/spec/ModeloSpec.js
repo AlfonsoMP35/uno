@@ -11,13 +11,13 @@ describe("Crear partida", function() {
   it("ana crea una partida para 2 jugadores", function() {
     var ju1=juego.usuarios["ana"];
     expect(juego.numeroPartidas()).toEqual(0);
-   // expect(partida.obtenerTodasPartidas().length).toEqual(0);
+    expect(juego.obtenerTodasPartidas().length).toEqual(0);
     var partida=ju1.crearPartida(2);
     expect(juego.numeroPartidas()).toEqual(1);
     expect(partida.codigo).toBeDefined();
     expect(partida.numeroJugadores()).toEqual(1);
     expect(partida.fase.nombre).toBe("iniciar");
-    //expect(partida.obtenerTodasPartidas().length).toEqual(1);
+    expect(juego.obtenerTodasPartidas().length).toEqual(1);
 
   });
 

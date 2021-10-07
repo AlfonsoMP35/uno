@@ -66,13 +66,12 @@ function Juego(){
 
      this.numeroPartidas=function(){
 		return Object.keys(this.partidas).length;
-	}
+	}  
 
-    function randomInt(low, high) {
-        return Math.floor(Math.random() * (high - low) + low);
-    }
-    
+}
 
+function randomInt(low, high) {
+    return Math.floor(Math.random() * (high - low) + low);
 }
 
 //Objeto que identifica al jugador al crear una partida o al unirse a una
@@ -118,7 +117,7 @@ function Partida(codigo,jugador,numJug){
     this.fase=new Inicial();
     var sentido= false; //Sentido agujas reloj
 
-
+    this.ordenTurno=[];
     this.mazo=[];
     this.mesa=[];
     
@@ -128,6 +127,7 @@ function Partida(codigo,jugador,numJug){
     this.puedeUnirAPartida=function(jugador){
         this.jugadores[jugador.nick]=jugador;
         jugador.codigoPartida=this.codigo;
+        this.ordenTurno.push(jugador.nick);
     }
 
     this.numeroJugadores=function(){
@@ -202,8 +202,18 @@ function Partida(codigo,jugador,numJug){
         this.mesa.push(this.asignarUnaCarta());
     }
 
-    //Pasar el turno
-    this.pasarTurno=function(){      
+    this.pasarTurno = function(nickJugador){
+        var nick = this.turno.nick;
+        if(nick=nickJugador){
+            var indice=this.ordenTurno.indexOf(nick);
+            var siguiente=(indice+1)%(Object.keys(this.jugadores).length);
+            this.turno=this.jugadores[this.ordenTurno[siguiente]];
+        }
+    }
+
+
+    //Pasar el turno -- FALTA TESTEAR DEBIDO A UN ERROR PREVIO
+   /* this.pasarTurno=function(){      
         if(this.sentido == false){                  //Sentido horario       
             var aux = this.listaJugadores.shift();      
             aux.turno = false;                          
@@ -216,7 +226,7 @@ function Partida(codigo,jugador,numJug){
             this.listaJugadores.push(aux);              
             this.listaJugadores[this.jugadores.length].turno = true;
         }       
-    }
+    }*/
 
 
      
