@@ -205,31 +205,56 @@ function Partida(codigo,jugador,numJug){
     this.pasarTurno = function(nickJugador){
         var nick = this.turno.nick;
         if(nick=nickJugador){
+            if(sentido == false){
             var indice=this.ordenTurno.indexOf(nick);
             var siguiente=(indice+1)%(Object.keys(this.jugadores).length);
             this.turno=this.jugadores[this.ordenTurno[siguiente]];
+            } else{
+                var indice=this.ordenTurno.indexOf(nick);
+                var siguiente=(indice-1)%(Object.keys(this.jugadores).length);
+                this.turno=this.jugadores[this.ordenTurno[siguiente]]; 
+            }
         }
     }
 
-
-    //Pasar el turno -- FALTA TESTEAR DEBIDO A UN ERROR PREVIO
-   /* this.pasarTurno=function(){      
-        if(this.sentido == false){                  //Sentido horario       
-            var aux = this.listaJugadores.shift();      
-            aux.turno = false;                          
-            this.listaJugadores.push(aux);              
-            this.listaJugadores[0].turno = true; 
+        //Función para jugar una carta del mazo del jugador
+        this.usarCarta=function(carta){                  
+            var jugada = this.jugador.mano.splice(carta,1);
+            this.mesa.push(jugada);
         }
-        else{                                       //Sentido antihorario
-            var aux = this.listaJugadores.shift();      
-            aux.turno = false;                          
-            this.listaJugadores.push(aux);              
-            this.listaJugadores[this.jugadores.length].turno = true;
-        }       
-    }*/
+    
+        //Comprobación de si se puede usar la carta
+        this.jugarCarta=function(carta){                    
+            var cartasig = this.mesa[this.mesa.length-1];       
+            if (cartasig == Numero){
+                if ((cartasig.color == carta.color) || (cartasig.valor == carta.valor)) {
+                    this.ponerEnJuego(carta);
+                }
+            }
+            else if (cartasig == Mas2){
+                if ((cartasig.color == carta.color) || (carta == Mas2)) {
+                    this.ponerEnJuego(carta);
+                }
+            }
+            else if (cartasig == Bloqueo){
+                if ((cartasig.color == carta.color) || (carta == Bloqueo)) {
+                    this.ponerEnJuego(carta);
+                }
+            }
+            else if (cartasig == Cambio){
+                if ((cartasig.color == carta.color) || (carta == Cambio)) {
+                    this.ponerEnJuego(carta);
+                    this.listaJugadores.reverse();              
+                }
+            }
+            else if ((carta == Comodin) || (carta == Comodin4)){
+                this.ponerEnJuego(carta);
+             }
+            else {
+                console.log("Jugada no valida.");  //cambiar a que se muestre en pantalla más adelante
+            }
+        }
 
-
-     
     this.crearMazo();
     this.unirAPartida(jugador);
 
