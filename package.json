@@ -1,0 +1,19 @@
+{
+  "name": "uno",
+  "version": "1.0.0",
+  "description": "Trabajo de la asignatura de Procesos de Ingeniería del Software del curso 2021-2022",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlfonsoMP35/uno.git"
+  },
+  "author": "Alfonso",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlfonsoMP35/uno/issues"
+  },
+  "homepage": "https://alfonsomp35.github.io/uno/"
+}

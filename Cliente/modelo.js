@@ -80,6 +80,7 @@ function Jugador(nick,juego){
     this.juego=juego;
     this.mano=[];
     this.codigoPartida;
+    this.puntos=0;
     this.crearPartida=function(numJug){
        return this.juego.crearPartida(nick, numJug);
     }
@@ -90,7 +91,7 @@ function Jugador(nick,juego){
     this.robar=function(num){
         var partida=this.obtenerPartida(this.codigoPartida);
         var robadas=partida.dameCartas(num);
-        var tmp = this.mano;
+       // var tmp = this.mano;
         this.mano=tmp.concat(robadas);
     }
     this.manoInicial=function(){
@@ -99,6 +100,25 @@ function Jugador(nick,juego){
     }
     this.obtenerPartida=function(codigo){
         return this.juego.partidas[codigo];
+    }
+
+    this.pasarTurno=function(){
+        var partida=this.obtenerPartida(this.codigoPartida);
+        partida.pasarTurno(this.nick);
+        this.robar(1);
+    }
+    this.jugarCarta=function(num){
+        var carta=this.mano[num];
+        var partida=this.obtenerPartida(this.codigoPartida);
+        partida.jugarCarta(carta,this.nick);
+    }
+    this.quitarCarta=function(carta){
+        var partida=this.obtenerPartida(this.codigoPartida);
+        var indice=this.mano.indexOf(carta);
+        this.mano.splice(indice,1);
+        if (this.mano.length<=0){
+            partida.finPartida();
+        }
     }
 
 
@@ -115,11 +135,12 @@ function Partida(codigo,jugador,numJug){
     this.numJug=numJug;
     this.jugadores={};
     this.fase=new Inicial();
-    var sentido= false; //Sentido agujas reloj
+    this.direccion=new Derecha(); //Sentido agujas reloj
 
     this.ordenTurno=[];
     this.mazo=[];
     this.mesa=[];
+    this.cartaActual;
     
     this.unirAPartida=function(jugador){
         this.fase.unirAPartida(this,jugador);
@@ -179,7 +200,6 @@ function Partida(codigo,jugador,numJug){
 
     }
 
-
     this.asignarUnaCarta=function(){
         var maxCartas = this.mazo.length;
         var indice = randomInt(1,maxCartas)-1;
@@ -190,8 +210,11 @@ function Partida(codigo,jugador,numJug){
     
     this.dameCartas=function(num){
         var cartas=[];
-        for(i=0; i<num; i++){
-            cartas.push(this.asignarUnaCarta());
+        for(i=0;i<num;i++){
+            var carta=this.asignarUnaCarta();
+            if (carta){
+                cartas.push(carta);
+            }
         }
         return cartas;
     }
@@ -202,7 +225,13 @@ function Partida(codigo,jugador,numJug){
         this.mesa.push(this.asignarUnaCarta());
     }
 
-    this.pasarTurno = function(nickJugador){
+    this.puedePasarTurno=function(nick){
+        if (nick==this.turno.nick){
+            this.direccion.pasarTurno(this)
+        }
+    }
+
+   /* this.pasarTurno = function(nickJugador){
         var nick = this.turno.nick;
         if(nick=nickJugador){
             if(sentido == false){
@@ -215,9 +244,9 @@ function Partida(codigo,jugador,numJug){
                 this.turno=this.jugadores[this.ordenTurno[siguiente]]; 
             }
         }
-    }
+    }*/
 
-        //Función para jugar una carta del mazo del jugador
+      /*  //Función para jugar una carta del mazo del jugador
         this.usarCarta=function(carta){                  
             var jugada = this.jugador.mano.splice(carta,1);
             this.mesa.push(jugada);
@@ -253,32 +282,137 @@ function Partida(codigo,jugador,numJug){
             else {
                 console.log("Jugada no valida.");  //cambiar a que se muestre en pantalla más adelante
             }
+        }*/
+
+        this.asignarUnaCarta=function(){
+            var maxCartas=this.mazo.length;
+            var res;
+            if (maxCartas>0){
+                var indice=randomInt(1,maxCartas)-1;
+                var carta=this.mazo.splice(indice,1);
+                res=carta[0];
+            }
+            return res;
         }
+        this.dameCartas=function(num){
+            var cartas=[];
+            for(i=0;i<num;i++){
+                var carta=this.asignarUnaCarta();
+                if (carta){
+                    cartas.push(carta);
+                }
+            }
+            return cartas;
+        }
+        this.pasarTurno=function(nick){
+            this.fase.pasarTurno(nick,this);
+        }
+        this.puedePasarTurno=function(nick){
+            if (nick==this.turno.nick){
+                this.direccion.pasarTurno(this)
+            }
+        }
+        this.asignarTurno=function(){
+            var nick=this.ordenTurno[0];
+            this.turno=this.jugadores[nick];
+        }
+        this.jugarCarta=function(carta,nick){
+            this.fase.jugarCarta(carta,nick,this);
+        }
+        this.puedeJugarCarta=function(carta,nick){
+            if (nick==this.turno.nick){
+                if (this.comprobarCarta(carta)){
+                    carta.comprobarEfecto(this);
+                    this.cambiarCartaActual(carta);
+                    this.turno.quitarCarta(carta);
+                    this.pasarTurno(nick);                
+                }
+            }
+        }
+        this.cambiarCartaActual=function(carta){
+            this.mesa.push(this.cartaActual);
+            this.cartaActual=carta;  
+        }
+        this.comprobarCarta=function(carta){
+            //comprobar que la carta que se puede jugar la carta, según la que hay en la mesa
+            return (this.cartaActual.tipo=="numero" && (this.cartaActual.color==carta.color || this.cartaActual.valor==carta.valor)
+                || this.cartaActual.tipo=="cambio" && (this.cartaActual.color==carta.color || this.cartaActual.tipo == carta.tipo))
+        }
+        this.cartaInicial=function(){
+            this.cartaActual=this.asignarUnaCarta();
+        }
+        this.cambiarDireccion=function(){
+            if (this.direccion.nombre=="derecha"){
+                this.direccion=new Izquierda();
+            }
+            else{
+                this.direccion=new Derecha();
+            }
+        }
+        this.finPartida=function(){
+            this.fase=new Final();
+            this.calcularPuntos()
+        }
+        this.calcularPuntos=function(){
+            var suma=0;
+            for(var jug in this.jugadores){
+                for(i=0;i<this.jugadores[jug].mano.length;i++){
+                    suma=suma+this.jugadores[jug].mano[i].valor;
+                }
+            }
+            this.turno.puntos=suma;
+        }
+    
+        this.crearMazo();
+        this.unirAPartida(jugador);
 
     this.crearMazo();
     this.unirAPartida(jugador);
 
+}//fin objeto Partida
 
-   
-    
+function Derecha(){
+    this.nombre="derecha";
+    this.pasarTurno=function(partida){
+        //ver el nick del que tiene el turno
+        //calcular el indice en el array ordenTurno
+        //sumarle 1 al indice MOD longitud del array
+        //asignarle el turno al nuevo jugador
+        var nick=partida.turno.nick;            
+        var indice=partida.ordenTurno.indexOf(nick);            
+        var siguiente=(indice+1)%(Object.keys(partida.jugadores).length);
+        partida.turno=partida.jugadores[partida.ordenTurno[siguiente]];
+    }
+}
 
+function Izquierda(){
+    this.nombre="izquierda";
+    this.pasarTurno=function(partida){
+        var nick=partida.turno.nick;            
+        var indice=partida.ordenTurno.indexOf(nick);            
+        var siguiente=(indice-1)%(Object.keys(partida.jugadores).length);
+        if (siguiente<0) {siguiente=Object.keys(partida.jugadores).length-1}
+        partida.turno=partida.jugadores[partida.ordenTurno[siguiente]];
+    }
 }
 
 //Objeto que indica el estado previo al comienzo de la partida (sala de espera)
 function Inicial(){
-    this.nombre="iniciar";
+    this.nombre="inicial";
     this.unirAPartida=function(partida,jugador){
-        //si numero jugadores < numJug
         partida.puedeUnirAPartida(jugador);
-        if(partida.numeroJugadores()>=partida.numJug){
+        if (partida.numeroJugadores()==partida.numJug){
             partida.fase=new Jugando();
+            partida.asignarTurno();
+            partida.cartaInicial();
         }
-
     }
-    this.esInicial=function(){
-        return true;
+    this.jugarCarta=function(carta,nick,partida){
+        console.log("La partida no ha comenzado");
     }
-
+    this.pasarTurno=function(nick,partida){
+        console.log("La partida no ha comenzado");
+    }
 }
 
 //Objeto que indica que los jugadores están jugando la partida (partida en curso)
@@ -287,63 +421,96 @@ function Jugando(){
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ya ha comenzado");
     }
-
+    this.jugarCarta=function(carta,nick,partida){
+        partida.puedeJugarCarta(carta,nick);
+    }
+    this.pasarTurno=function(nick,partida){
+        partida.puedePasarTurno(nick);
+    }
 }
 
 //Objeto que indica que la partida ha finalizado
 function Final(){
     this.nombre="final";
     this.unirAPartida=function(partida,jugador){
+        console.log("La partida ha terminado");
+    }
+    this.jugarCarta=function(carta,nick,partida){
         console.log("La partida ya ha terminado");
     }
-
+    this.pasarTurno=function(nick,partida){
+        console.log("La partida ha terminado");
+    }
 }
 
 //Constructores de los tipos de cartas
-function Numero(valor, color){
+function Numero(valor,color){
+    this.tipo="numero";
     this.color=color;
     this.valor=valor;
-    
+    this.comprobarEfecto=function(partida){
+        console.log("No hay efectos");
+    }
 }
 
 function Cambio(valor,color){
     this.tipo="cambio";
     this.color=color;
     this.valor=valor;   
+    this.comprobarEfecto=function(partida){
+        partida.cambiarDireccion();
+    }
 }
 
 function Bloqueo(valor,color){
     this.tipo="bloqueo";
     this.color=color;
-    this.valor=valor;    
+    this.valor=valor;
+    this.comprobarEfecto=function(partida){
+        
+    }    
 }
 
 function Mas2(valor,color){
     this.tipo="mas2";
     this.color=color;
     this.valor=valor;    
+    this.comprobarEfecto=function(partida){
+        
+    }
 }
 
 function Comodin(valor){
     this.tipo="comodin";
     this.valor=valor;
+    this.comprobarEfecto=function(partida){
+        
+    }
 }
 
 function Comodin4(valor){
     this.tipo="comodin4";
     this.valor=valor;
+    this.comprobarEfecto=function(partida){
+        
+    }
 }
-
 function Prueba(){
-    juego = new Juego();
+    juego =new Juego();
     juego.agregarJugador("ana");
     ju1=juego.usuarios["ana"];
-    partida = ju1.crearPartida(2);
+    ju1.crearPartida(3);
+    juego.agregarJugador("pepe");
+    ju2=juego.usuarios["pepe"];
+    ju2.unirAPartida(ju1.codigoPartida);
     juego.agregarJugador("luis");
-    ju2=juego.usuarios["luis"];
-
-
-
-
-
+    ju3=juego.usuarios["luis"];
+    ju3.unirAPartida(ju1.codigoPartida);
+    partida=juego.partidas[ju1.codigoPartida];
+    ju1.manoInicial();
+    ju2.manoInicial();
+    ju3.manoInicial();
+    //partida.cartaInicial();
 }
+
+
