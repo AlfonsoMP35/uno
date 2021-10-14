@@ -4,7 +4,7 @@
   "description": "Trabajo de la asignatura de Procesos de Ingeniería del Software del curso 2021-2022",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine-node servidor"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/AlfonsoMP35/uno/issues"
   },
-  "homepage": "https://alfonsomp35.github.io/uno/"
+  "homepage": "https://alfonsomp35.github.io/uno/",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jasmine-node": "^3.0.0"
+  },
+  "devDependencies": {}
 }

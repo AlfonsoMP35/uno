@@ -1,4 +1,4 @@
-var modelo=require("./modelo.js");
+var modelo = require("./modelo.js");
 
 describe("El juego del UNO...", function() {
     var juego;

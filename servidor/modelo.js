@@ -1,16 +1,18 @@
-
 function Juego(){
     this.usuarios={};
     this.partidas={};
 
     this.agregarJugador=function(nick){
+       var res = {nick:-1};
         if (!this.usuarios[nick]){
             var jugador= new Jugador(nick,this);
             this.usuarios[nick]=jugador;
+            res = {nick:nick};
         }
         else{
             console.log("El nick está en uso");
         }
+        return res;
     }
 
     this.crearPartida=function(nick,numJug){
