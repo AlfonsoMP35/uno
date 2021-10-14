@@ -27,10 +27,16 @@ app.get("/agregarJugador/:nombre",function(request,response){
 
 
 //crear partida
-app.get("/crearPartida/:njugadores, :nombre",function(request,response){
-    var nick = request.params.nombre;
-    var njug = request.params.njugadores;
-    var res = juego.crearPartida(nick,njug);
+app.get("/crearPartida/:njugad /:nick",function(request,response){
+    var nick = request.params.nick;
+    var njug = request.params.njugad;
+    var ju1=juego.usuarios[nick];
+    var res = {codigo:-1};
+    if(ju1){
+        var partida=ju1.crearPartida(num);
+        console.log("Nueva partida de" +nick+ "codigo:"+res)
+        res.codigo=ju1.codigoPartida;
+    }
     response.send(res);
 });
 
