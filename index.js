@@ -27,31 +27,33 @@ app.get("/agregarJugador/:nombre",function(request,response){
 
 
 //crear partida
-app.get("/crearPartida/:njug /:nick",function(request,response){
-    var nick = request.params.nick;
-    var njug = request.params.numJug;
-    var ju1=juego.usuarios[nick];
-    var res = {codigo:"patata"};
-    if(ju1){
-        var partida=ju1.crearPartida(num);
-        console.log("Nueva partida de" +nick+ "codigo:"+res)
-        res.codigo=ju1.codigoPartida;
-    }
-    response.send(res);
-});
+app.get("/crearPartida/:num/:nick",function(request,response){
+	var nick=request.params.nick;
+	var num=request.params.num;
+	var ju1=juego.usuarios[nick];
+	var res={codigo:-1};
+	if (ju1){
+		var partida=ju1.crearPartida(num);
+		console.log("Nueva partida de "+nick +" codigo: "+ju1.codigoPartida);
+		res.codigo=ju1.codigoPartida;
+	}
+	response.send(res);
+})
 
 
 //unir a partida
 app.get("/unirAPartida/:code /:nick ",function(request,response){
-    var code = request.params.code;
-    var nick = request.params.nick;
-    var ju2 = juego.usuarios[nick];
-    var res = ju2.partida[code];
-    response.send(res);
+    var nick=request.params.nick;
+	var code=request.params.code;
+	var res=juego.unirAPartida(code,nick);
+	response.send(res);
 });
 
 //obtener lista de partidas
-
+app.get("/obtenerTodasPartidas",function(request,response){
+	var lista=juego.obtenerTodasPartidas();
+	response.send(lista);
+});
 
 
 app.listen(app.get('port'),function(){

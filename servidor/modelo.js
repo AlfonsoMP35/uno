@@ -40,10 +40,10 @@ function Juego(){
     }
 
     this.unirAPartida=function(codigo,nick){
+        var res = -1;
         if (this.partidas[codigo]){
             var jugador=this.usuarios[nick];
-            this.partidas[codigo].unirAPartida(jugador);
-            res = {codigo:codigo, nick:nick};
+            res = this.partidas[codigo].unirAPartida(jugador);
         }
         return res;
     }

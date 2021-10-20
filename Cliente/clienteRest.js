@@ -1,6 +1,6 @@
 function ClienteRest(){
     this.agregarJugador = function(nick){
-        $.getJSON("/agregarJugador/" +nick, function(data){
+        $.getJSON("/agregarJugador/"+nick, function(data){
             //se ejecuta cuando conteste el servidor
             console.log(data);
 
@@ -14,39 +14,30 @@ function ClienteRest(){
 
     }
 
-    this.crearPartida = function(njug, nick){
-        $.getJSON("/crearPartida/" +njug+ "/" + nick, function(data){
-            //se ejecuta cuando conteste el servidor
-            console.log(data);
+	this.crearPartida=function(num,nick){
+		$.getJSON("/crearPartida/"+num+"/"+nick,function(data){
+			console.log(data);
+		})
+	}
 
-
-        });
-        //sigue la ejecución sin esperar
-        //mostrar una ruleta
-
-
-
-
-    }
 
     //unir a partida
     this.unirAPartida = function(code,nick){
-        $.getJSON("/unirAPartida/" +code+ "/" + nick, function(data){
+        $.getJSON("/unirAPartida/"+code+"/"+nick, function(data){
             //se ejecuta cuando conteste el servidor
             console.log(data);
 
 
         });
-        //sigue la ejecución sin esperar
-        //mostrar una ruleta
-
-
-
 
     }
 
     //obtener lista de partidas
-    
+    this.obtenerTodasPartidas=function(){
+		$.getJSON("/obtenerTodasPartidas",function(data){
+			console.log(data);
+		})
+	}
 
 
 
