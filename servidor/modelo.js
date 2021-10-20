@@ -43,7 +43,9 @@ function Juego(){
         if (this.partidas[codigo]){
             var jugador=this.usuarios[nick];
             this.partidas[codigo].unirAPartida(jugador);
+            res = {codigo:codigo, nick:nick};
         }
+        return res;
     }
 
     this.obtenerCodigo=function(){

@@ -3,7 +3,7 @@ var express = require("express");  //Middleware
 var app = express();
 var server = require("http").Server(app);
 var bodyParser = require("body-parser");
-var modelo = require("servidor/modelo.js");
+var modelo = require("./servidor/modelo.js");
 
 var juego = new modelo.Juego();
 
@@ -13,7 +13,7 @@ app.use(express.static(__dirname + "/"));
 
 app.get("/",function(request,response){
     var contenido = fs.readFileSync(__dirname + "/cliente/index.html");
-    response.setHeader("Content-typ","text/html");   //El servidor recibe contenido html
+    response.setHeader("content-type","text/html");   //El servidor recibe contenido html
     response.send(contenido);
 });
 
@@ -27,11 +27,11 @@ app.get("/agregarJugador/:nombre",function(request,response){
 
 
 //crear partida
-app.get("/crearPartida/:njugad /:nick",function(request,response){
+app.get("/crearPartida/:njug /:nick",function(request,response){
     var nick = request.params.nick;
-    var njug = request.params.njugad;
+    var njug = request.params.numJug;
     var ju1=juego.usuarios[nick];
-    var res = {codigo:-1};
+    var res = {codigo:"patata"};
     if(ju1){
         var partida=ju1.crearPartida(num);
         console.log("Nueva partida de" +nick+ "codigo:"+res)
@@ -42,8 +42,15 @@ app.get("/crearPartida/:njugad /:nick",function(request,response){
 
 
 //unir a partida
+app.get("/unirAPartida/:code /:nick ",function(request,response){
+    var code = request.params.code;
+    var nick = request.params.nick;
+    var ju2 = juego.usuarios[nick];
+    var res = ju2.partida[code];
+    response.send(res);
+});
 
-
+//obtener lista de partidas
 
 
 

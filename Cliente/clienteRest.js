@@ -29,4 +29,27 @@ function ClienteRest(){
 
     }
 
+    //unir a partida
+    this.unirAPartida = function(code,nick){
+        $.getJSON("/unirAPartida/" +code+ "/" + nick, function(data){
+            //se ejecuta cuando conteste el servidor
+            console.log(data);
+
+
+        });
+        //sigue la ejecución sin esperar
+        //mostrar una ruleta
+
+
+
+
+    }
+
+    //obtener lista de partidas
+    
+
+
+
+
+
 }
