@@ -43,7 +43,8 @@ function Juego(){
         var res = -1;
         if (this.partidas[codigo]){
             var jugador=this.usuarios[nick];
-            res = this.partidas[codigo].unirAPartida(jugador);
+            this.partidas[codigo].unirAPartida(jugador);
+            res = {codigo:codigo}
         }
         return res;
     }
@@ -80,7 +81,7 @@ function Jugador(nick,juego){
         return this.juego.crearPartida(nick,numJug);
     }
     this.unirAPartida=function(codigo){
-        this.juego.unirAPartida(codigo,nick);
+        return this.juego.unirAPartida(codigo,nick);    
     }
     this.robar=function(num){
         var partida=this.obtenerPartida(this.codigoPartida);

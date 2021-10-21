@@ -42,10 +42,16 @@ app.get("/crearPartida/:num/:nick",function(request,response){
 
 
 //unir a partida
-app.get("/unirAPartida/:code /:nick ",function(request,response){
+app.get("/unirAPartida/:code/:nick",function(request,response){
     var nick=request.params.nick;
 	var code=request.params.code;
-	var res=juego.unirAPartida(code,nick);
+	var ju2 = juego.usuarios[nick];
+	var res = {codigo:-1};
+	if(ju2){
+		res=ju2.unirAPartida(code,nick);
+		console.log("Jugador "+nick+ " se ha unido a la partida de codigo " +code);		
+	}
+	
 	response.send(res);
 });
 
