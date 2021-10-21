@@ -1,11 +1,20 @@
 var fs = require("fs");
 var express = require("express");  //Middleware 
 var app = express();
-var server = require("http").Server(app);
+var http = require("http").Server(app);
+
+//Gestion de sockets
+var { Server } = require("socket.io"); //Libreria de socket.io
+var io = new Server(http); //Conexión con el servidor HTTP
+
 var bodyParser = require("body-parser");
+
+//Importaciones
 var modelo = require("./servidor/modelo.js");
+var ssrv = require("./servidor/servidorWS.js"); //Importación del objeto servidorWS
 
 var juego = new modelo.Juego();
+var servidorWS = new ssrv.ServidorWS(); //NOTA: Objetos definidos por el usuario en mayusculas
 
 app.set('port',process.env.PORT || 5000); //Usa el puerto designado o creamos uno
 
@@ -62,11 +71,12 @@ app.get("/obtenerTodasPartidas",function(request,response){
 });
 
 
-app.listen(app.get('port'),function(){
+http.listen(app.get('port'),function(){ //Camibado de app a http (variable) para que el socket funcione
     console.log("La app NodeJS se está ejecutando en el puerto ",app.get("port"));
 });
 
-
+// lanzar el servidorWS
+servidorWS.lanzarServidorWS(io,juego);
 
 
 

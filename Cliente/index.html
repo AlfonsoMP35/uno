@@ -2,11 +2,14 @@
     <head>
         <title>La app del Uno</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js" integrity="sha512-zN6KYOtONNTOGXz0RkWX2EpavN9VdIs+2w+To+fhciFv83YA9maUpi2lzZWrOfKXdFIZZomWufBznkyHi3a8oQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="/cliente/clienteRest.js"></script>
+        <script src="/cliente/clienteWS.js"></script>
     </head>
     <body>
         <script type="text/javascript">
             var rest = new ClienteRest();
+            ws = new ClienteWS();
         </script>
     </body>
 </html>
