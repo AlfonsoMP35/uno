@@ -71,7 +71,7 @@ app.get("/obtenerTodasPartidas",function(request,response){
 });
 
 
-http.listen(app.get('port'),function(){ //Camibado de app a http (variable) para que el socket funcione
+http.listen(app.get('port'),function(){ //Camibado de app a http (app) para que el socket funcione
     console.log("La app NodeJS se está ejecutando en el puerto ",app.get("port"));
 });
 

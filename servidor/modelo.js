@@ -299,6 +299,7 @@ function Jugando(){
     this.nombre="jugando";
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ya ha comenzado");
+        jugador.codigoPartida=-1;
     }
     this.jugarCarta=function(carta,nick,partida){
         partida.puedeJugarCarta(carta,nick);
@@ -311,6 +312,7 @@ function Final(){
     this.nombre="final";
     this.unirAPartida=function(partida,jugador){
         console.log("La partida ha terminado");
+        jugador.codigoPartida=-1;
     }
     this.jugarCarta=function(carta,nick,partida){
         console.log("La partida ya ha terminado");
