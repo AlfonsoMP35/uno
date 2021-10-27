@@ -23,10 +23,21 @@ function ClienteWS(){
         this.socket.emit("manoInicial",this.nick);
     }
 
-    this.meToca=function(){
+   /* this.meToca=function(){
         this.socket.emit("meToca",this.nick);
+    } */
+
+    //Jugar carta
+    this.jugarCarta=function(num){
+        this.socket.emit("jugarCarta",this.nick,num)
     }
-    ///TERMINAR SOCKET
+
+    //Robar carta
+    this.roba=function(){
+        this.socket.emit("roba",this.nick)
+    }
+
+
 
     //servidor WS del cliente
     this.servidorWSCliente=function(){
@@ -36,7 +47,7 @@ function ClienteWS(){
         });
 
         //entrada para la respuesta del WS              //BUSCAR EL ERROR GENERADO
-        this.socket.on("partidaCreada",function(){
+        this.socket.on("partidaCreada",function(data){
             console.log(data);
             cli.codigo=data.codigo;
         });
@@ -52,7 +63,24 @@ function ClienteWS(){
 
         this.socket.on("mano",function(data){
             console.log(data);
-            cli.meToca();
+            //cli.meToca();
+        });
+        this.socket.on("turno",function(data){
+            console.log(data);
+            //cli.meToca();
+        })
+
+        //Jugar carta
+        this.socket.on("jugar",function(data){
+            console.log(data);
+            cli.jugarCarta();
+            
+        });
+
+        //Robar carta
+        this.socket.on("robarCarta",function(data){
+            console.log(data);
+            cli.toma();
         });
 
 
