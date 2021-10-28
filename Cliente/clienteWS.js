@@ -23,18 +23,19 @@ function ClienteWS(){
         this.socket.emit("manoInicial",this.nick);
     }
 
-   /* this.meToca=function(){
-        this.socket.emit("meToca",this.nick);
-    } */
-
     //Jugar carta
     this.jugarCarta=function(num){
         this.socket.emit("jugarCarta",this.nick,num)
     }
 
     //Robar carta
-    this.roba=function(){
-        this.socket.emit("roba",this.nick)
+    this.robarCarta=function(num){
+        this.socket.emit("robarCarta",this.nick,num)
+    }
+
+    //Pasar Turno
+    this.pasarTurno=function(){
+        this.socket.emit("pasarTurno",this.nick)
     }
 
 
@@ -63,25 +64,27 @@ function ClienteWS(){
 
         this.socket.on("mano",function(data){
             console.log(data);
-            //cli.meToca();
         });
+
         this.socket.on("turno",function(data){
             console.log(data);
-            //cli.meToca();
         })
 
-        //Jugar carta
-        this.socket.on("jugar",function(data){
+        //Ganador
+        this.socket.on("final",function(data){
             console.log(data);
-            cli.jugarCarta();
+            if (data.nick == this.nick){
+                console.log("El jugador " +this.nick+ "ha ganado.")
+            }
             
         });
 
-        //Robar carta
-        this.socket.on("robarCarta",function(data){
+        //Error
+        this.socket.on("fallo",function(data){
             console.log(data);
-            cli.toma();
         });
+
+       
 
 
     }

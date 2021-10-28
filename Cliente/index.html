@@ -1,15 +1,35 @@
 <html>
     <head>
         <title>La app del Uno</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js" integrity="sha512-zN6KYOtONNTOGXz0RkWX2EpavN9VdIs+2w+To+fhciFv83YA9maUpi2lzZWrOfKXdFIZZomWufBznkyHi3a8oQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
         <script src="/cliente/clienteRest.js"></script>
         <script src="/cliente/clienteWS.js"></script>
+        <script src="/cliente/controlWeb.js"></script>
     </head>
     <body>
+        <div class="container-md">  
+          <div class="row">
+            <div class="col-md-4">
+                <h2>Juego de cartas: El UNO</h2>
+            </div>
+            <div class="col-md-8">
+                <div id="agregarJugador"></div>
+                <div id="crearPartida">Crear partida</div>
+                <div id="esperando">Esperando rival</div>
+                <div id="listaPartidas">Lista de partidas</div>
+                <div id="unirAPartida">Unir a partida</div>
+            </div>
+          </div>
+        </div>
         <script type="text/javascript">
-            var rest = new ClienteRest();
-            ws = new ClienteWS();
+            rest=new ClienteRest();
+            ws=new ClienteWS();
+            iu=new ControlWeb();
+            iu.mostrarAgregarJugador();
         </script>
     </body>
 </html>

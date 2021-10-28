@@ -85,9 +85,11 @@ function Jugador(nick,juego){
     }
     this.robar=function(num){
         var partida=this.obtenerPartida(this.codigoPartida);
-        var robadas=partida.dameCartas(num);
-        //var tmp=this.mano;
-        this.mano=this.mano.concat(robadas);
+        if(partida.turno.nick == this.nick){
+            var robadas=partida.dameCartas(num);
+            //var tmp=this.mano;
+            this.mano=this.mano.concat(robadas);
+        }
     }
     this.manoInicial=function(){
         var partida=this.obtenerPartida(this.codigoPartida);
@@ -132,14 +134,17 @@ function Partida(codigo,jugador,numJug){
     this.unirAPartida=function(jugador){
         this.fase.unirAPartida(this,jugador);
     }
+
     this.puedeUnirAPartida=function(jugador){
         this.jugadores[jugador.nick]=jugador;
         jugador.codigoPartida=this.codigo;
         this.ordenTurno.push(jugador.nick);
     }
+
     this.numeroJugadores=function(){
 		return Object.keys(this.jugadores).length;
 	}
+
     this.crearMazo=function(){
         var colores=["azul","amarillo","verde","rojo"];
         for (i=0;i<colores.length;i++){
