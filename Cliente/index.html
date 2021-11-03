@@ -17,11 +17,14 @@
                 <h2>Juego de cartas: El UNO</h2>
             </div>
             <div class="col-md-8">
+                <br>
                 <div id="agregarJugador"></div>
-                <div id="crearPartida">Crear partida</div>
-                <div id="esperando">Esperando rival</div>
+                <br>
+                <div id="crearPartida"></div>
+                <div class="spinner-border"></div>
+               <!-- <div id="esperando">Esperando rival</div>
                 <div id="listaPartidas">Lista de partidas</div>
-                <div id="unirAPartida">Unir a partida</div>
+                <div id="unirAPartida">Unir a partida</div>-->
             </div>
           </div>
         </div>
@@ -30,6 +33,8 @@
             ws=new ClienteWS();
             iu=new ControlWeb();
             iu.mostrarAgregarJugador();
+            iu.mostrarCrearPartida();
+           
         </script>
     </body>
 </html>

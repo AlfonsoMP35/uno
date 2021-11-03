@@ -15,6 +15,40 @@ function ControlWeb(){
 	}
 
 	//this.mostrarCrearPartida
+	this.mostrarCrearPartida=function(){
+		var cadenas='<div id="mCP"><label for="njug">Crear Partida:</label>';
+		cadenas=cadenas+'<input type="text" class="form-control" id="num">';
+		cadenas=cadenas+'<button type="button" id="btnCP" class="btn btn-primary">Crear</button>';
+		cadenas=cadenas+'</div>';
+
+		$("#crearPartida").append(cadenas);
+
+		$("#btnCP").on("click",function(){
+			var num=$('#njug').val();
+			var nick=$('#usr').val();
+			$("#mCP").remove();
+			rest.crearPartida(num,nick);
+		})
+		
+
+	}
+
+
 	//this.mostrarUnirAPartida
+	this.mostrarUnirAPartida=function(){
+
+
+	}
+
+
 	//this.mostrarListaPartidas
+	this.mostrarListaPartidas=function(){
+
+
+
+	}
+
+
+
+
 }
