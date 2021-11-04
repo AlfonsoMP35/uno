@@ -15,16 +15,52 @@
           <div class="row">
             <div class="col-md-4">
                 <h2>Juego de cartas: El UNO</h2>
+                <meta charset="utf-8">
             </div>
             <div class="col-md-8">
                 <br>
                 <div id="agregarJugador"></div>
                 <br>
-                <div id="crearPartida"></div>
-                <div class="spinner-border"></div>
-               <!-- <div id="esperando">Esperando rival</div>
-                <div id="listaPartidas">Lista de partidas</div>
-                <div id="unirAPartida">Unir a partida</div>-->
+                <div id="crearPartida"></div>           
+                <div id="listaPartidas">
+                </div>
+               <!--  <div id="listaPartidas">Lista de partidas</div>-->
+                <div id="unirAPartida"></div>
+            </div>
+          </div>
+
+          <div class="row">
+              <div id="rivales"></div>
+          </div>
+          <div class="row">
+              <div id="actual"></div>
+          </div>
+          <div class="row">
+              <div id="mano">
+
+            </div>
+          </div>
+          <div class="modal" id="miModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+          
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Atención</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+          
+                <!-- Modal body -->
+                <div class="modal-body" id="contenidoModal">
+
+                </div>
+          
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+          
+              </div>
             </div>
           </div>
         </div>
@@ -33,7 +69,6 @@
             ws=new ClienteWS();
             iu=new ControlWeb();
             iu.mostrarAgregarJugador();
-            iu.mostrarCrearPartida();
            
         </script>
     </body>

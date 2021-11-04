@@ -95,7 +95,7 @@ function Jugador(nick,juego){
         var partida=this.obtenerPartida(this.codigoPartida);
         this.mano=partida.dameCartas(3);
     }
-    this.obtenerPartida=function(codigo){
+    this.obtenerPartida=function(codigo){   
         return this.juego.partidas[codigo];
     }
     this.pasarTurno=function(){
@@ -331,6 +331,7 @@ function Numero(valor,color){
     this.tipo="numero";
     this.color=color;
     this.valor=valor;
+    this.nombre="numero"+valor;
     this.comprobarEfecto=function(partida){
         console.log("No hay efectos");
     }
@@ -338,6 +339,7 @@ function Numero(valor,color){
 
 function Cambio(valor,color){
     this.tipo="cambio";
+    this.nombre="cambio"+color;
     this.color=color;
     this.valor=valor;   
     this.comprobarEfecto=function(partida){

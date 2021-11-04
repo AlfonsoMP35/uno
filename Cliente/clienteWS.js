@@ -64,10 +64,12 @@ function ClienteWS(){
 
         this.socket.on("mano",function(data){
             console.log(data);
+            iu.mostrarMano();
         });
 
         this.socket.on("turno",function(data){
             console.log(data);
+            iu.mostrarCartaActual(data.cartaActual);
         })
 
         //Ganador

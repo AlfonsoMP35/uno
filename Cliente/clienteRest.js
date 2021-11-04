@@ -3,7 +3,14 @@ function ClienteRest(){
         $.getJSON("/agregarJugador/"+nick, function(data){
             //se ejecuta cuando conteste el servidor
             console.log(data);
-
+            if(data.nick =-1){
+                ws.nick=data.nick;
+                iu.mostrarCrearPartida();
+               // cli.obtenerTodasPartidas();
+            }else{
+                iu.mostrarModal("El nick "+nick+" esta en uso.");
+                iu.mostrarUnirAPartida();
+            }
 
         });
 
@@ -13,6 +20,8 @@ function ClienteRest(){
 		$.getJSON("/crearPartida/"+num+"/"+nick,function(data){
 			console.log(data);
 		})
+
+
 	}
 
 
@@ -32,6 +41,8 @@ function ClienteRest(){
 		$.getJSON("/obtenerTodasPartidas",function(data){
 			console.log(data);
 		})
+
+        
 	}
 
 
