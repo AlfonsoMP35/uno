@@ -6,8 +6,6 @@ function ClienteRest(){
 
 
         });
-        //sigue la ejecución sin esperar
-        //mostrar una ruleta
 
     }
 

@@ -69,30 +69,33 @@ function ServidorWS(){
             //Jugar carta
 			socket.on("jugarCarta",function(nick,num){
 				var ju1=juego.usuarios[nick];
-				ju1.jugarCarta(num);
-				cli.enviarAlRemitente(socket,"mano",ju1.mano);
-				var codigo=ju1.codigoPartida;
-				var partida=juego.partidas[codigo];
-				var nickTurno=partida.turno.nick;
-				cli.enviarAlRemitente(socket,"turno",{"turno":nickTurno,"cartaActual":partida.cartaActual});
-				if (partida.fase.nombre=="final"){
-						cli.enviarATodos(io,codigo,"final",{"ganador":nickTurno});
-				}				
+				if (ju1){
+					ju1.jugarCarta(num);
+					cli.enviarAlRemitente(socket,"mano",ju1.mano);
+					var codigo=ju1.codigoPartida;
+					var partida=juego.partidas[codigo];
+					var nickTurno=partida.turno.nick;
+					cli.enviarATodos(io,codigo,"turno",{"turno":nickTurno,"cartaActual":partida.cartaActual});
+					if (partida.fase.nombre=="final"){
+							cli.enviarATodos(io,codigo,"final",{"ganador":nickTurno});
+					}				
+				}
+				else{
+					cli.enviarAlRemitente(socket,"fallo","El usuario o la partida no existen");	
+				}
 			});
 
             //Robar carta
-            socket.on("robarCarta",function(nick,num){
-                var ju1 = juego.usuarios[nick];
-                if(ju1){
-                    var robada =ju1.robar(num);
-                    var codigo=ju1.codigoPartida;
-				    var partida=juego.partidas[codigo];
-				    var nickTurno=partida.turno.nick;
-                    cli.enviarATodos(io,codigo,"turno",{carta:robada})
-                }else{
-                    cli.enviarAlRemitente(socket,"turno",{turno:partida.turno.nick});
-                }
-            })
+			socket.on("robarCarta",function(nick,num){
+				var ju1=juego.usuarios[nick];
+				if (ju1){
+					ju1.robar(num);
+					cli.enviarAlRemitente(socket,"mano",ju1.mano);
+				}
+				else{
+					cli.enviarAlRemitente(socket,"fallo","El usuario o la partida no existen");	
+				}
+			});
 
             socket.on("pasarTurno",function(nick){
                 var ju1 = juego.usuarios[nick];

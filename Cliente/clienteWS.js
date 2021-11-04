@@ -85,7 +85,7 @@ function ClienteWS(){
         });
 
         this.socket.on("nuevaPartida",function(lista){
-
+            console.log(data);
         })
        
 
