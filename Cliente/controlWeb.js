@@ -1,7 +1,7 @@
 function ControlWeb(){
 	this.mostrarAgregarJugador=function(){
-		var cadena = '<h1>Registro<h1><br>'
-		cadena=cadena+'<div id="mAJ"><label for="usr">Nombre jugador:</label>';
+		var cadena = '<div id="mAJ"><h1>Registro<h1><br>'
+		cadena=cadena+'<label for="usr">Nombre jugador:</label>';
         cadena=cadena+'<input type="text" class="form-control" id="usr">';
         cadena=cadena+'<button type="button" id="btnAJC" class="btn btn-primary">Crear partida</button>';
         cadena=cadena+'<button type="button" id="btnAJU" class="btn btn-primary">Unirse a partida</button>';
@@ -73,7 +73,7 @@ function ControlWeb(){
 		$('#mLP').remove();
 
 
-		var cadena='<div class=list-group>';
+		var cadena='<div id="mLP" class=list-group>';
 		for(i=0;i<lista.lenght;i++){
 			cadena=cadena+'<a href="#"class="list-group-item list-group-item-action">'+
 			lista[i].codigo+'</a>';
@@ -107,7 +107,7 @@ function ControlWeb(){
 
 	this.mostrarMano=function(lista){
 		$('#mM').remove();
-		var cadena='<div id="nM"class="card-columns">';
+		var cadena='<div id="mM"class="card-columns">';
 
 		for(i=0;i<lista.lenght;i++){
 		cadena=cadena+'<div class="card bg-light">';
@@ -137,5 +137,7 @@ function ControlWeb(){
 	  cadena=cadena+'</div>'
 	  $('#actual').append(cadena);
 	}
+
+	
 
 }

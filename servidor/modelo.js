@@ -84,30 +84,41 @@ function Jugador(nick,juego){
         return this.juego.unirAPartida(codigo,nick);    
     }
     this.robar=function(num){
+        var numRobadas=0;
         var partida=this.obtenerPartida(this.codigoPartida);
-        if(partida.turno.nick == this.nick){
+        if(partida.turno.nick == this.nick && partida.fase.nombre=="jugando"){
             var robadas=partida.dameCartas(num);
-            //var tmp=this.mano;
-            this.mano=this.mano.concat(robadas);
+            if(robadas.length<=0){
+                this.pasarTurno(this.nick);
+            }else{
+                this.mano=this.mano.concat(robadas);
+                numRobadas=robadas.length;
+            }
         }
+        return numRobadas;
     }
+
     this.manoInicial=function(){
         var partida=this.obtenerPartida(this.codigoPartida);
         this.mano=partida.dameCartas(3);
     }
+
     this.obtenerPartida=function(codigo){   
         return this.juego.partidas[codigo];
     }
+
     this.pasarTurno=function(){
         var partida=this.obtenerPartida(this.codigoPartida);
         partida.pasarTurno(this.nick);
         this.robar(1);
     }
+
     this.jugarCarta=function(num){
         var carta=this.mano[num];
         var partida=this.obtenerPartida(this.codigoPartida);
         partida.jugarCarta(carta,this.nick);
     }
+    
     this.quitarCarta=function(carta){
         var partida=this.obtenerPartida(this.codigoPartida);
         var indice=this.mano.indexOf(carta);
@@ -186,6 +197,11 @@ function Partida(codigo,jugador,numJug){
     }
     this.dameCartas=function(num){
         var cartas=[];
+        if(this.mazo.length<num){
+            this.mazo=this.mazo.concat(this.mesa);
+           // this.mazo.push(this.cartaActual);
+            this.mesa=[];
+        }
         for(i=0;i<num;i++){
             var carta=this.asignarUnaCarta();
             if (carta){
