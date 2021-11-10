@@ -1,13 +1,24 @@
 function ControlWeb(){
 	this.mostrarAgregarJugador=function(){
-		var cadena='<div id="mAJ"><label for="usr">Nick:</label>';
+		var cadena = '<h1>Registro<h1><br>'
+		cadena=cadena+'<div id="mAJ"><label for="usr">Nombre jugador:</label>';
         cadena=cadena+'<input type="text" class="form-control" id="usr">';
-        cadena=cadena+'<button type="button" id="btnAJ" class="btn btn-primary">Entrar</button>';
-        cadena=cadena+'</div>';
+        cadena=cadena+'<button type="button" id="btnAJC" class="btn btn-primary">Crear partida</button>';
+        cadena=cadena+'<button type="button" id="btnAJU" class="btn btn-primary">Unirse a partida</button>';
+		cadena=cadena+'</div>';
 
 		$("#agregarJugador").append(cadena);         
 
-		$("#btnAJ").on("click",function(){
+		$("#btnAJC").on("click",function(){
+			var nick=$('#usr').val();
+			if(nick==""){
+				iu.mostrarModal("Introudce tu nick: ");
+			}
+			$("#mAJ").remove();
+			rest.agregarJugador(nick);
+		})
+
+		$("#btnAJU").on("click",function(){
 			var nick=$('#usr').val();
 			if(nick==""){
 				iu.mostrarModal("Introudce tu nick: ");
@@ -27,10 +38,10 @@ function ControlWeb(){
 		$("#crearPartida").append(cadena);
 
 		$("#btnCP").on("click",function(){
-			var num=$('#njug').val();
+			var nj=$('#num').val();
 			var nick=$('#usr').val();
 			$("#mCP").remove();
-			rest.crearPartida(num,nick);
+			rest.crearPartida(nj,nick);
 		})
 		
 
@@ -39,9 +50,20 @@ function ControlWeb(){
 
 	//this.mostrarUnirAPartida
 	this.mostrarUnirAPartida=function(){
-	var cadena='<div id="mUP"><label for="code">Unir a partida</label>';
+	var cadena='<div id="mUP"><label for="cod">Unir a partida</label>';
+	cadena=cadena+'<input type="text" class="form-control" id="codigo">';
+	cadena=cadena+'<button type="button" id="btnUP" class="btn btn-primary">Unirse</button>';
+	cadena=cadena+'</div>';
+
 
 	$("#unirAPartida").append(cadena);
+
+	$("#btnCP").on("click",function(){
+		var code=$('#codigo').val();
+		var nick=$('#usr').val();
+		$("#mUP").remove();
+		rest.unirAPartida(code,nick);
+	})
 
 	}
 

@@ -1,75 +1,106 @@
-<html>
-    <head>
-        <title>La app del Uno</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-        <script src="/cliente/clienteRest.js"></script>
-        <script src="/cliente/clienteWS.js"></script>
-        <script src="/cliente/controlWeb.js"></script>
-    </head>
-    <body>
-        <div class="container-md">  
-          <div class="row">
-            <div class="col-md-4">
-                <h2>Juego de cartas: El UNO</h2>
-                <meta charset="utf-8">
-            </div>
-            <div class="col-md-8">
-                <br>
-                <div id="agregarJugador"></div>
-                <br>
-                <div id="crearPartida"></div>           
-                <div id="listaPartidas">
-                </div>
-               <!--  <div id="listaPartidas">Lista de partidas</div>-->
-                <div id="unirAPartida"></div>
-            </div>
-          </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>El juego del Uno</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+  <script src="/cliente/clienteRest.js"></script>
+  <script src="/cliente/clienteWS.js"></script>
+  <script src="/cliente/controlWeb.js"></script>
+  <style>
+  body {
+    font: 17px Montserrat, sans-serif;
+    line-height: 1.8;
+    color: #f5f6f7;
+  }
+  p {font-size: 16px;}
+  .bg-1 { 
+    background-color: #e73939 ; /*Red*/ 
+    color: #ffffff;
+  }
+  .bg-2 { 
+    background-color: #474e5d; /* Dark Blue */
+    color: #ffffff;
+  }
+  .bg-3 { 
+    background-color: #ffffff; /* White */
+    color: #555555;
+    padding: 70px;
+  }
+  .bg-4 { 
+    background-color: #2f2f2f; /* Black Gray */
+    color: #fff;
+  }
+  .container-fluid {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
 
-          <div class="row">
-              <div id="rivales"></div>
-          </div>
-          <div class="row">
-              <div id="actual"></div>
-          </div>
-          <div class="row">
-              <div id="mano">
+  </style>
+</head>
+<body>
 
-            </div>
-          </div>
-          <div class="modal" id="miModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-          
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <h4 class="modal-title">Atención</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-          
-                <!-- Modal body -->
-                <div class="modal-body" id="contenidoModal">
+<!-- Navbar 
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Uno</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Como jugar</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>-->
 
-                </div>
-          
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-          
-              </div>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript">
-            rest=new ClienteRest();
-            ws=new ClienteWS();
-            iu=new ControlWeb();
-            iu.mostrarAgregarJugador();
-           
-        </script>
-    </body>
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+  <h2 class="margin"><b>Uno</b></h2>
+  <h2 class="margin">Juego de cartas</h2>
+  
+</div>
+
+
+
+<!-- Third Container: Contenedor con el texto -->
+<div class="container-fluid bg-3">    
+  
+  <div class="row">
+      <div id="agregarJugador"></div>
+      <div id="crearPartida"></div>           
+      <div id="listaPartidas"></div>
+     <!--  <div id="listaPartidas">Lista de partidas</div>-->
+      <div id="unirAPartida"></div>
+  </div>
+
+</div>
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>Escuela Superior de Ingeniería Informatica de Albacete </p> 
+</footer>
+<script type="text/javascript">
+  rest=new ClienteRest();
+  ws=new ClienteWS();
+  iu=new ControlWeb();
+  iu.mostrarAgregarJugador();
+ 
+</script>
+
+</body>
 </html>

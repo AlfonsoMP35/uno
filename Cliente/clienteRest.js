@@ -5,7 +5,11 @@ function ClienteRest(){
             console.log(data);
             if(data.nick =-1){
                 ws.nick=data.nick;
-                iu.mostrarCrearPartida();
+               // if(data.#btnAJC){
+                    iu.mostrarCrearPartida();
+                /*}else if (data.#btnAJU){
+                    iu.mostrarListaPartidas();
+                }*/
                // cli.obtenerTodasPartidas();
             }else{
                 iu.mostrarModal("El nick "+nick+" esta en uso.");
