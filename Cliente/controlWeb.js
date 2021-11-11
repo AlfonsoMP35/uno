@@ -37,12 +37,22 @@ function ControlWeb(){
 
 		$("#crearPartida").append(cadena);
 
-		$("#btnCP").on("click",function(){
-			var nj=$('#num').val();
-			var nick=$('#usr').val();
-			$("#mCP").remove();
-			rest.crearPartida(nj,nick);
-		})
+		$("#btnCP").on("click", function () {
+            var nj = $('#num').val();
+            if (nj == "") {
+                alert('Introduzca el número de jugadores');
+            }
+            else if (nj < 2 || nj > 8) {
+                $('#num').val("");
+                alert('Introduzca un número entre 2-8 jugadores');
+            }
+            else {
+                ws.crearPartida(nj, nick);
+                $("#mCP").remove();
+                $("#mUAP").remove();
+                $("#mLP").remove();
+            }
+        })
 		
 
 	}
@@ -50,15 +60,15 @@ function ControlWeb(){
 
 	//this.mostrarUnirAPartida
 	this.mostrarUnirAPartida=function(){
-	var cadena='<div id="mUP"><label for="cod">Unir a partida</label>';
+	var cadena='<div id="mUAP"><label for="cod">Unir a partida</label>';
 	cadena=cadena+'<input type="text" class="form-control" id="codigo">';
-	cadena=cadena+'<button type="button" id="btnUP" class="btn btn-primary">Unirse</button>';
+	cadena=cadena+'<button type="button" id="btnUAP" class="btn btn-primary">Unirse</button>';
 	cadena=cadena+'</div>';
 
 
 	$("#unirAPartida").append(cadena);
 
-	$("#btnCP").on("click",function(){
+	$("#btnUAP").on("click",function(){
 		var code=$('#codigo').val();
 		var nick=$('#usr').val();
 		$("#mUP").remove();

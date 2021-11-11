@@ -47,7 +47,7 @@ function ClienteWS(){
             console.log("Conectador al servidor WS");
         });
 
-        //entrada para la respuesta del WS              //BUSCAR EL ERROR GENERADO
+        //entrada para la respuesta del WS 
         this.socket.on("partidaCreada",function(data){
             console.log(data);
             cli.codigo=data.codigo;
@@ -87,7 +87,9 @@ function ClienteWS(){
         });
 
         this.socket.on("nuevaPartida",function(lista){
-            console.log(data);
+            if(!cli.codigo && cli.nick){
+                iu.mostrarListadoPartidas(lista);
+                }
         })
        
 

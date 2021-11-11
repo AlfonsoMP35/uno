@@ -49,8 +49,29 @@ function ClienteRest(){
         
 	}
 
+    this.obtenerPartidasDisponibles = function () {
+        $.getJSON("/obtenerPartidasDisponibles",function(data){
+            console.log(data);
+            iu.mostrarPartidas(data);
+        });
+    }
 
+    this.robarCarta = function (nick,num) {
+        $.getJSON("/robarCarta/"+nick+"/"+num,function(data){
+            console.log(data);
+        });
 
+    }
 
+    this.dameCartas = function (nick,num) {
+        $.getJSON("/dameCartas/"+nick+"/"+num,function(data){
+            console.log(data);
+        });
+    }
 
+    this.mostrarJuego = function(){
+        $.getJSON("/mostrarJuego",function(data){
+            console.log(data);
+        });
+    }
 }
