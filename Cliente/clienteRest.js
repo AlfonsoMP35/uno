@@ -6,7 +6,7 @@ function ClienteRest(){
             if(data.nick =-1){
                 ws.nick=data.nick;
                 $.cookie("nick",data.nick);
-                iu.mostrarHome(data);
+                iu.mostrarControl(data);
                // if(data.#btnAJC){
                    // iu.mostrarCrearPartida();
                 /*}else if (data.#btnAJU){
@@ -83,14 +83,7 @@ function ClienteRest(){
         });
     }
 
-    this.mostrarControl=function(data,num){
-        $('#mC').remove();
-        var cadena = '<div id="mC"><h4>Jugador<h4>';
-        cadena=cadena+'<p>Nick: '+data.nick+'<p>';
-        cadena=cadena+'</div>';
 
-
-    }
 
 
 }

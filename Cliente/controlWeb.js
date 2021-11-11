@@ -13,7 +13,7 @@ function ControlWeb(){
 		cadena=cadena+'<label for="usr">Nombre jugador:</label>';
         cadena=cadena+'<input type="text" class="form-control" id="usr">';
         cadena=cadena+'<button type="button" id="btnAJC" class="btn btn-primary">Crear partida</button>';
-        cadena=cadena+'<button type="button" id="btnAJU" class="btn btn-primary">Unirse a partida</button>';
+      //  cadena=cadena+'<button type="button" id="btnAJU" class="btn btn-primary">Unirse a partida</button>';
 		cadena=cadena+'</div>';
 
 		$("#agregarJugador").append(cadena);         
@@ -27,14 +27,14 @@ function ControlWeb(){
 			rest.agregarJugador(nick);
 		})
 
-		$("#btnAJU").on("click",function(){
+	/*	$("#btnAJU").on("click",function(){
 			var nick=$('#usr').val();
 			if(nick==""){
 				iu.mostrarModal("Introudce tu nick: ");
 			}
 			$("#mAJ").remove();
 			rest.agregarJugador(nick);
-		})
+		})*/
 	}
 
 	//this.mostrarCrearPartida
@@ -66,6 +66,29 @@ function ControlWeb(){
 		
 
 	}
+
+	this.mostrarControl = function() {
+        var nick = $("#nick").text()
+        var cadena = '<div id="jugador"><label>Nick:</label>';
+        cadena=cadena+'<p class="d-inline" id="nick">'+nick+'</p></div>';
+
+        $("#col-izq").append(cadena)
+    }
+
+    this.mostrarControl=function(data,num){
+        $('#mC').remove();
+        var cadena = '<div id="mC"><div class="row"><div class="col-md-4">'
+		cadena=cadena+'<div><h4>Jugador<h4>';
+        cadena=cadena+'<p>Nick: '+data.nick+'<p></div>';
+		cadena=cadena+'<div id="crearPartida"></div>';
+
+
+        cadena=cadena+'</div></div></div>';
+
+		$("#mostrarControl").append(cadena);
+
+
+    }
 
 
 	//this.mostrarUnirAPartida
@@ -169,6 +192,5 @@ function ControlWeb(){
 		$('#mCA').remove();
 	}
 
-	
 
 }
