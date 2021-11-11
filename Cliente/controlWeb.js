@@ -1,4 +1,13 @@
 function ControlWeb(){
+	this.comprobarUsuario=function(){
+		if($.cookie("nick")){
+			ws.nick=$.cookie("nick");
+			iu.mostrarHome({nick:ws.nick});
+		}else{
+			iu.mostrarAgregarJugador();
+		}
+	}
+
 	this.mostrarAgregarJugador=function(){
 		var cadena = '<div id="mAJ"><h1>Registro<h1><br>'
 		cadena=cadena+'<label for="usr">Nombre jugador:</label>';
@@ -39,6 +48,7 @@ function ControlWeb(){
 
 		$("#btnCP").on("click", function () {
             var nj = $('#num').val();
+			var nick = $('#usr').val();
             if (nj == "") {
                 alert('Introduzca el número de jugadores');
             }
@@ -71,7 +81,7 @@ function ControlWeb(){
 	$("#btnUAP").on("click",function(){
 		var code=$('#codigo').val();
 		var nick=$('#usr').val();
-		$("#mUP").remove();
+		$("#mUAP").remove();
 		rest.unirAPartida(code,nick);
 	})
 
@@ -146,6 +156,17 @@ function ControlWeb(){
 
 	  cadena=cadena+'</div>'
 	  $('#actual').append(cadena);
+	}
+
+
+	this.limpiar=function(){
+		$("#mAJ").remove();
+		$("#mCP").remove();
+        $("#mUAP").remove();
+		$('#mLP').remove();
+		$('#cM').remove();
+		$('#mM').remove();
+		$('#mCA').remove();
 	}
 
 	

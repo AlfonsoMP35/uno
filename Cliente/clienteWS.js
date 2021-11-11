@@ -38,6 +38,13 @@ function ClienteWS(){
         this.socket.emit("pasarTurno",this.nick)
     }
 
+    this.abandonarPartida=function(){
+        this.socket.emit("abandonarPartida",this.nick);
+    }
+
+    this.cerrarSesion=function(){
+        this.socket.emit("cerrarSesion",this.nick);
+    }
 
 
     //servidor WS del cliente
@@ -92,7 +99,17 @@ function ClienteWS(){
                 }
         })
        
+        this.socket.on("jugadorAbandona",function(){
+            iu.mostrarModal("Un jugador abandona la partida.");
 
+        })
+
+        this.socket.on("usuarioEliminado",function(){
+            cli.nick="";
+            $.removeCookie("nick");
+            iu.limpiar();
+            iu.mostrarAgergarJugador();
+        })
 
     }
     

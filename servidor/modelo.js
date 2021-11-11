@@ -64,6 +64,11 @@ function Juego(){
     this.numeroPartidas=function(){
 		return Object.keys(this.partidas).length;
 	}
+
+    this.borrarUsuario=function(nick){
+        delete this.usuarios[nick];
+    }
+
 }
 
 function randomInt(low, high) {
@@ -126,6 +131,15 @@ function Jugador(nick,juego){
         if (this.mano.length<=0){
             partida.finPartida();
         }
+    }
+
+    this.abandonarPartida=function(){
+        var partida=this.obtenerPartida(this.codigoPartida);
+        partida.fase=new Final();
+    }
+
+    this.cerrarSesion=function(){
+        this.juego.borrarUsuario(this.nick);
     }
 }
 

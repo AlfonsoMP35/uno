@@ -110,6 +110,26 @@ function ServidorWS(){
                 }
             });
 
+            socket.on("abandonarPartida",function(nick){
+                var ju1 = juego.usuarios[nick];
+                if(ju1){
+                    ju1.abandonarPartida();
+                    var codigo=ju1.codigoPartida;
+                    cli.enviarATodos(io,codigo,"jugadorAbandona",{turno:nickTurno})
+                }
+            });
+
+            socket.on("cerrarSesion",function(nick){
+                var ju1 = juego.usuarios[nick];
+                if(ju1){
+                  var codigo=ju1.codigoPartida;
+                  var partida=juego.partidas[codigo];
+                }
+                ju1.cerrarSesion();
+                cli.enviarAlRemitente(socket,"usuarioEliminado");
+            });
+
+
         })
     }
 }

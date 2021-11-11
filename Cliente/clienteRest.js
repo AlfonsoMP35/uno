@@ -5,8 +5,10 @@ function ClienteRest(){
             console.log(data);
             if(data.nick =-1){
                 ws.nick=data.nick;
+                $.cookie("nick",data.nick);
+                iu.mostrarHome(data);
                // if(data.#btnAJC){
-                    iu.mostrarCrearPartida();
+                   // iu.mostrarCrearPartida();
                 /*}else if (data.#btnAJU){
                     iu.mostrarListaPartidas();
                 }*/
@@ -27,6 +29,12 @@ function ClienteRest(){
 
 
 	}
+
+    this.mostrarHome=function(data){
+        //iu.mostrarControl(data,"1"); //Implementar
+        iu.mostrarCrearPartida();
+        rest.obtenerPartidasDisponibles();
+    }
 
 
     //unir a partida
@@ -74,4 +82,15 @@ function ClienteRest(){
             console.log(data);
         });
     }
+
+    this.mostrarControl=function(data,num){
+        $('#mC').remove();
+        var cadena = '<div id="mC"><h4>Jugador<h4>';
+        cadena=cadena+'<p>Nick: '+data.nick+'<p>';
+        cadena=cadena+'</div>';
+
+
+    }
+
+
 }
