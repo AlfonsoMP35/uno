@@ -1,54 +1,86 @@
 function ControlWeb(){
+
 	this.comprobarUsuario=function(){
 		if($.cookie("nick")){
 			ws.nick=$.cookie("nick");
-			iu.mostrarHome({nick:ws.nick});
+			//iu.mostrarHome({nick:ws.nick});
+			iu.mostrarLobby();
 		}else{
 			iu.mostrarAgregarJugador();
 		}
+
 	}
 
-	this.mostrarAgregarJugador=function(){
-		var cadena = '<div id="mAJ"><h1>Registro<h1><br>'
-		cadena=cadena+'<label for="usr">Nombre jugador:</label>';
-        cadena=cadena+'<input type="text" class="form-control" id="usr">';
-        cadena=cadena+'<button type="button" id="btnAJC" class="btn btn-primary">Crear partida</button>';
-      //  cadena=cadena+'<button type="button" id="btnAJU" class="btn btn-primary">Unirse a partida</button>';
-		cadena=cadena+'</div>';
+	this.mostrarAgregarJugador = function() {
+        
+        $("#btnAJ").on("click", function(){
+            var nick = $("#usr").val()
+            if(nick) {
+                
+                // $("#agregarJugador").remove()
+                rest.agregarJugador(nick)
+                // iu.mostrarControl()
+                // iu.mostrarEleccion()
+            }
+        })
+            
+    }
 
-		$("#agregarJugador").append(cadena);         
+	this.mostrarLobby = function() {
+        var nick = $("#usr").val()
+        $("#agregarJugador").remove()
 
-		$("#btnAJC").on("click",function(){
-			var nick=$('#usr').val();
-			if(nick==""){
-				iu.mostrarModal("Introudce tu nick: ");
-			}
-			$("#mAJ").remove();
-			rest.agregarJugador(nick);
-		})
+        var nick = '<p id="nick" class="d-none">'+nick+'</p>'
+        $("body").append(nick)
 
-	/*	$("#btnAJU").on("click",function(){
-			var nick=$('#usr').val();
-			if(nick==""){
-				iu.mostrarModal("Introudce tu nick: ");
-			}
-			$("#mAJ").remove();
-			rest.agregarJugador(nick);
-		})*/
-	}
+        var cad = `
+			<div id="bienvenida">
+			<h4> Bienvenido <h4>
+			<p> Jugador`+nick+`</p>
+			</div>
+            <div id="elecciones" class="text-center row justify-content-center">
+                <button id="crear" class="btn btn-primary">CREAR PARTIDA</button>
+                <button id="unirse" class="btn btn-primary">UNIRSE A PARTIDA</button>
+            </div>`
+        
+        $("#elegirAccion").append(cad)
 
-	//this.mostrarCrearPartida
+        $("#crear").on("click", function() {
+            $("#elegirAccion").remove()
+            iu.mostrarCrearPartida()
+        })
+
+        $("#unirse").on("click", function() {
+            $("#elegirAccion").remove()
+            var div= `
+            <h4 id="tituloLP" class="text-center mb-3 pb-3">Lista de partidas</h4>
+            <div id="listaPartidas"></div>
+            <div id="spinner" class="col p-5 text-center">
+                <div class="spinner-border text-dark p-5" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>`
+            $("#mostrarPartidas").append(div)
+            rest.obtenerPartidasDisponibles()
+        })
+
+
+    }
+
+	
 	this.mostrarCrearPartida=function(){
-		var cadena='<div id="mCP"><label for="njug">Crear Partida:</label>';
-		cadena=cadena+'<input type="text" class="form-control" id="num">';
-		cadena=cadena+'<button type="button" id="btnCP" class="btn btn-primary">Crear</button>';
-		cadena=cadena+'</div>';
+		var cadena=`
+		<div id="mCP">
+			<label for="njug">Crear Partida:</label>
+			<input type="number" class="form-control" id="num">
+			<button type="button" id="btnCP" class="btn btn-primary">Crear</button>
+		</div>`
 
 		$("#crearPartida").append(cadena);
 
 		$("#btnCP").on("click", function () {
-            var nj = $('#num').val();
-			var nick = $('#usr').val();
+            var numjug = $('#num').val();
+			var nick = $("#nick").text();
             if (nj == "") {
                 alert('Introduzca el número de jugadores');
             }
@@ -57,7 +89,7 @@ function ControlWeb(){
                 alert('Introduzca un número entre 2-8 jugadores');
             }
             else {
-                ws.crearPartida(nj, nick);
+                ws.crearPartida(numjug, nick);
                 $("#mCP").remove();
                 $("#mUAP").remove();
                 $("#mLP").remove();
@@ -68,26 +100,14 @@ function ControlWeb(){
 	}
 
 	this.mostrarControl = function() {
-        var nick = $("#nick").text()
-        var cadena = '<div id="jugador"><label>Nick:</label>';
-        cadena=cadena+'<p class="d-inline" id="nick">'+nick+'</p></div>';
+		var nick = $("#nick").text()
+        var cadena = `
+        <div id="dnick">
+            <label>Nick:</label>
+            <p class="d-inline" id="nick">`+nick+`</p>
+        </div>`
 
         $("#col-izq").append(cadena)
-    }
-
-    this.mostrarControl=function(data,num){
-        $('#mC').remove();
-        var cadena = '<div id="mC"><div class="row"><div class="col-md-4">'
-		cadena=cadena+'<div><h4>Jugador<h4>';
-        cadena=cadena+'<p>Nick: '+data.nick+'<p></div>';
-		cadena=cadena+'<div id="crearPartida"></div>';
-
-
-        cadena=cadena+'</div></div></div>';
-
-		$("#mostrarControl").append(cadena);
-
-
     }
 
 
