@@ -83,7 +83,19 @@ function ClienteRest(){
         });
     }
 
+    this.obtenerTodosResultados = function() {
+        $.getJSON("/obtenerTodosResultados",function(data){
+            console.log(data);
+            //iu.mostrarListaResultados(data);
+        });
+    }
 
+    this.obtenerResultados = function(nick) {
+        $.getJSON("/obtenerResultados/"+nick,function(data){
+            console.log(data);
+            //iu.mostrarListaResultados(data);
+        });
+    }
 
 
 }

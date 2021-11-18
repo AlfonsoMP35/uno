@@ -1,6 +1,9 @@
+var cad=require("./cad.js");
+
 function Juego(){
     this.usuarios={};
     this.partidas={};
+    this.cad=new cad.CAD();
 
     this.agregarJugador=function(nick){
        var res = {nick:-1};
@@ -69,7 +72,25 @@ function Juego(){
         delete this.usuarios[nick];
     }
 
-}
+    this.obtenerTodosResultados=function(){
+        this.cad.encontrarTodosResultados(function(lista){
+            callback(lista);
+        })
+    }
+    this.obtenerResultados=function(criterio,callback){
+        this.cad.encontrarResultadoCriterio(criterio,callback);
+    }
+
+    this.insertarResultado=function(resultado){
+        this.cad.insertarResultado(resultado,function(res){
+            console.log(res);
+        })
+    }
+
+    this.cad.conectar(function(){});
+
+}// FIN JUEGO
+
 
 function randomInt(low, high) {
 	return Math.floor(Math.random() * (high - low) + low);
@@ -141,7 +162,13 @@ function Jugador(nick,juego){
     this.cerrarSesion=function(){
         this.juego.borrarUsuario(this.nick);
     }
-}
+
+    this.insertarResultado=function(prop,numJug){
+        var resultado= new Resultado(prop,this.nick,this.puntos,numJug);
+        this.juego.insertarResultado(resultado);
+    }
+
+}//FIN JUGADOR
 
 function Partida(codigo,jugador,numJug){
     this.codigo=codigo;
@@ -272,6 +299,7 @@ function Partida(codigo,jugador,numJug){
     this.finPartida=function(){
         this.fase=new Final();
         this.calcularPuntos()
+        this.turno.insertarResultado(this.propietario,this.numJug);
     }
     this.calcularPuntos=function(){
         var suma=0;
@@ -409,6 +437,13 @@ function Comodin4(valor){
     this.comprobarEfecto=function(partida){
         
     }
+}
+
+function Resultado(prop,ganador,puntos, numJug){
+    this.propietario=prop;
+    this.ganador=ganador;
+    this.puntos=puntos;
+    this.numeroJugadores=numJug;
 }
 
 
