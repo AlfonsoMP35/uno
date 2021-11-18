@@ -63,6 +63,7 @@ function ClienteWS(){
         this.socket.on("unidoAPartida",function(data){
             console.log(data);
             cli.codigo=data.codigo;
+            iu.mostrarCargando(data);
         });
 
         this.socket.on("pedirCartas",function(data){

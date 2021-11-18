@@ -81,10 +81,10 @@ function ControlWeb(){
 		$("#btnCP").on("click", function () {
             var numjug = $('#num').val();
 			var nick = $("#nick").text();
-            if (nj == "") {
+            if (numjug == "") {
                 alert('Introduzca el número de jugadores');
             }
-            else if (nj < 2 || nj > 8) {
+            else if (numjug < 2 || numjug > 8) {
                 $('#num').val("");
                 alert('Introduzca un número entre 2-8 jugadores');
             }
@@ -123,12 +123,50 @@ function ControlWeb(){
 
 	$("#btnUAP").on("click",function(){
 		var code=$('#codigo').val();
-		var nick=$('#usr').val();
-		$("#mUAP").remove();
-		rest.unirAPartida(code,nick);
+		var nick=$('#nick').text();
+
+		if(code){
+			$("#mUAP").remove();
+			ws.unirAPartida(code,nick);
+		}
 	})
 
 	}
+
+	this.mostrarEspera = function(data) {
+        console.log('JUGADORES: ' + data.jugadores)
+        $("#crearPartida").remove()
+        $("#mostrarPartidas").remove()
+        $("#listaJugadores").remove()
+        $("#tituloLP").remove()
+        var lj = '<div id="listaJugadores" class="container scroll mb-5"></div>'
+        $("#c1").append(lj)
+        var div= `
+        <h3 class="text-center mb-3 pb-3">Lista de jugadores</h3>`
+        $("#listaJugadores").append(div)
+        var div1= `<div id="lJ" class="container"></div>`
+        $("#listaJugadores").append(div1) 
+        var jugadores = data.jugadores
+        var cadena = `
+        <div id="cabecera" class="col p-5 text-center">
+            <div class="spinner-border text-light p-5" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>`
+        for (var i = 0; i < jugadores.length; i++) {
+            console.log(jugadores[i])
+            var cad = `
+            <div class="d-flex flex-row justify-content-center" id="jugador_`+jugadores[i]+`">
+                <h5>`+jugadores[i]+`</h5>
+            </div>`
+            $("#lJ").append(cad)
+        }
+        
+
+        $("#bienvenido").append(cadena)  
+        $("#cabecera").remove()
+        $("#mCP").remove()
+    }
 
 
 	//this.mostrarListaPartidas
