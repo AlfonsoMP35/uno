@@ -58,6 +58,7 @@ function ClienteWS(){
         this.socket.on("partidaCreada",function(data){
             console.log(data);
             cli.codigo=data.codigo;
+            iu.mostrarCargando(data);
         });
 
         this.socket.on("unidoAPartida",function(data){
@@ -78,6 +79,17 @@ function ClienteWS(){
         this.socket.on("turno",function(data){
             console.log(data);
             iu.mostrarCartaActual(data.cartaActual);
+        })
+
+        this.socket.on("partidaEmpezada", function(data) {
+            console.log(data)
+            iu.mostrarTablero(data)
+            iu.mostrarCartaActual(data)
+        })
+
+        this.socket.on("cartaJugada", function(data) {
+            console.log(data)
+            iu.mostrarCartaActual(data)
         })
 
         //Ganador

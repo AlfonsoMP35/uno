@@ -71,7 +71,7 @@ function ControlWeb(){
 	this.mostrarCrearPartida=function(){
 		var cadena=`
 		<div id="mCP">
-			<label for="njug">Crear Partida:</label>
+			<label for="num">Crear Partida:</label>
 			<input type="number" class="form-control" id="num">
 			<button type="button" id="btnCP" class="btn btn-primary">Crear</button>
 		</div>`
@@ -206,39 +206,32 @@ function ControlWeb(){
 		$('#miModal').modal('show');
 	}
 
-	this.mostrarMano=function(lista){
-		$('#mM').remove();
-		var cadena='<div id="mM"class="card-columns">';
+    this.mostrarMano = function(lista) {
+        $("#mM").remove()
+        var cadena = `
+        <div id="mM" class="card-columns row">`
+        
+        for (var i = 0; i<lista.length; i++) {
+            var carta = lista[i].img+".png"
+            cadena += `
+            <div id="`+i+`" class="cardcol pb-1 mb-2 misCartas">
+                <a onclick="ws.jugarCarta(`+i+`)"><img class="card-img border border-dark" src="/cliente/img/`+carta+`" alt=""></a>
+            </div>`
+        }
+        cadena += '</div>'
+        $("#mano").append(cadena)
+    }
 
-		for(i=0;i<lista.lenght;i++){
-		cadena=cadena+'<div class="card bg-light">';
-		cadena=cadena+'<div class="card-body text-center">';
-		cadena=cadena+'<div class="card-img-top" src="cliente/img/'+lista[i].nombre+ '"alt="Card image">'
-		cadena=cadena+'<p class="card-text">'+lista[i]+'</p>';
-		cadena=cadena+'</div> </div>';
-
-		}
-
-	  cadena=cadena+'</div>'
-	  $('#mano').append(cadena);
-
-
-	}
-
-	this.mostrarCartaActual=function(carta){
-		$('#mCA').remove();
-
-		var cadena='<div id="nM"class="card-columns">';
-		cadena=cadena+'<div class="card bg-light">';
-		cadena=cadena+'<div class="card-body text-center">';
-		cadena=cadena+'<div class="card-img-top" src="cliente/img/'+carta+ '"alt="Card image">'
-		cadena=cadena+'<p class="card-text">'+carta.tipo+'</p>';
-		cadena=cadena+'</div> </div>';
-
-	  cadena=cadena+'</div>'
-	  $('#actual').append(cadena);
-	}
-
+    this.mostrarCartaActual = function(lista) {
+        $("#mCA").remove()
+        var cartaActual = lista.cartaActual
+        var carta = cartaActual.img+".png"
+        var cadena = `
+        <div id="mCA" class="cardcol p-2 my-5 mx-4">
+            <img class="card-img border border-dark" src="/cliente/img/`+carta+`" alt="">
+        </div>`
+        $("#actual").append(cadena)
+    }
 
 	this.limpiar=function(){
 		$("#mAJ").remove();
@@ -247,7 +240,6 @@ function ControlWeb(){
 		$('#mLP').remove();
 		$('#cM').remove();
 		$('#mM').remove();
-		$('#mCA').remove();
 	}
 
 
