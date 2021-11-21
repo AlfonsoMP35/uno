@@ -224,7 +224,7 @@ function ControlWeb(){
 
     this.mostrarCartaActual = function(lista) {
         $("#mCA").remove()
-        var cartaActual = lista.cartaActual
+        var cartaActual = lista.cartaActual;
         var carta = cartaActual.img+".png"
         var cadena = `
         <div id="mCA" class="cardcol p-2 my-5 mx-4">
