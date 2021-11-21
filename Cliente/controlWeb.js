@@ -219,7 +219,7 @@ function ControlWeb(){
             </div>`
         }
         cadena += '</div>'
-        $("#mano").append(cadena)
+        $("#mano").append(cadena);
     }
 
     this.mostrarCartaActual = function(lista) {
