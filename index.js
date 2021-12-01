@@ -8,8 +8,11 @@ var { Server } = require("socket.io"); //Libreria de socket.io
 var io = new Server(http); //Conexión con el servidor HTTP
 
 var bodyParser = require("body-parser");
+var passport=require("passport");
+var cookieSession = require("cookie-session");
 
 //Importaciones
+require("./servidor/passport-setup.js");
 var modelo = require("./servidor/modelo.js");
 var ssrv = require("./servidor/servidorWS.js"); //Importación del objeto servidorWS
 
@@ -19,6 +22,23 @@ var servidorWS = new ssrv.ServidorWS(); //NOTA: Objetos definidos por el usuario
 app.set('port',process.env.PORT || 5000); //Usa el puerto designado o creamos uno
 
 app.use(express.static(__dirname + "/"));
+
+app.use(cookieSession({
+	name:'unocartas', //nombre de la cookie
+	keys:["key1","key2"]
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+const haIniciado=function(request,response,next){
+	if(request.user){
+		next();
+	}
+	else{
+		response.redirect("/");
+	}
+}
 
 app.get("/",function(request,response){
     var contenido = fs.readFileSync(__dirname + "/cliente/index.html");
@@ -36,7 +56,7 @@ app.get("/agregarJugador/:nombre",function(request,response){
 
 
 //crear partida
-app.get("/crearPartida/:num/:nick",function(request,response){
+app.get("/crearPartida/:num/:nick",haIniciado,function(request,response){
 	var nick=request.params.nick;
 	var num=request.params.num;
 	var ju1=juego.usuarios[nick];
@@ -49,9 +69,38 @@ app.get("/crearPartida/:num/:nick",function(request,response){
 	response.send(res);
 })
 
+//Rutas a definir para validar a usuarios con OAuth2
+// /auth/gooogle -> redireccionamos al usuario a Google para validar
+// /auth/instagram --> redireccionamos ...
+//...
+
+app.get("/auth/google",passport.authenticate("google",{scope:["profile", "email"]}));
+
+// /google/callback --> aqui llega la respuesta de Google
+// /good --> en caso de usuario de google valido
+// /fail --> en caso de usuario no valido	
+
+app.get("/good",function(request,response){
+	//definir el nick como el email del usuario de Google
+	//agregarJugador(nick);
+	console.log(request.user.emails[0].value);
+	juego.agregarJugador(nick);
+	response.cookie('nick',nick);
+	response.send("/");
+
+})
+
+app.get("/fallo",function(request,response){
+	response.send("No se pudo iniciar sesión");
+
+});
+
+app.get("/google/callback",passport.authenticate("google",{failureRedirect:'/fallo'}),function(request,response){
+	response.redirect("/good");
+});
 
 //unir a partida
-app.get("/unirAPartida/:code/:nick",function(request,response){
+app.get("/unirAPartida/:code/:nick",haIniciado,function(request,response){
     var nick=request.params.nick;
 	var code=request.params.code;
 	var ju2 = juego.usuarios[nick];
@@ -65,12 +114,12 @@ app.get("/unirAPartida/:code/:nick",function(request,response){
 });
 
 //obtener lista de partidas
-app.get("/obtenerTodasPartidas",function(request,response){
+app.get("/obtenerTodasPartidas",haIniciado,function(request,response){
 	var lista=juego.obtenerTodasPartidas();
 	response.send(lista);
 });
 
-app.get("/obtenerTodosResultados",function(request,response){
+app.get("/obtenerTodosResultados",haIniciado,function(request,response){
 	if(juego){
 		juego.obtenerTodosResultados(function(lista){
 			response.send(lista);
@@ -78,7 +127,7 @@ app.get("/obtenerTodosResultados",function(request,response){
 	}
 })
 
-app.get("/obtenerResultados/:nick",function(request,response){
+app.get("/obtenerResultados/:nick",haIniciado,function(request,response){
 	var nick=request.params.nick;
 	if(juego){
 		juego.obtenerResultados({ganador:nick},function(lista){
@@ -88,7 +137,7 @@ app.get("/obtenerResultados/:nick",function(request,response){
 
 })
 
-app.get("/cerrarSesion/:nick",function(request,response){
+app.get("/cerrarSesion/:nick",haIniciado,function(request,response){
 	var nick=request.params.nick;
 	var ju1=juego.usuarios[nick];
 	if (ju1){
