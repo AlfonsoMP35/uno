@@ -31,6 +31,10 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+
+
 const haIniciado=function(request,response,next){
 	if(request.user){
 		next();
@@ -98,6 +102,25 @@ app.get("/fallo",function(request,response){
 app.get("/google/callback",passport.authenticate("google",{failureRedirect:'/fallo'}),function(request,response){
 	response.redirect("/good");
 });
+
+app.post('/registrarUsuario',function(request,response){
+	var email=request.body.email;
+	var clave=request.body.clave;
+
+	juego.registrarUsuario(email,clave,function(data){
+		response.send(data);
+	});
+})
+
+app.post('/loginUsuario',function(request,response){
+	var email=request.body.email;
+	var clave=request.body.clave;
+
+	juego.loginUsuario(email,clave,function(data){
+		response.send(data);
+	});
+})
+
 
 //unir a partida
 app.get("/unirAPartida/:code/:nick",haIniciado,function(request,response){

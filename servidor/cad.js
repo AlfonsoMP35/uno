@@ -60,6 +60,17 @@ function CAD(){
         })
     }
 
+    function encontrarCriterio(coleccion, criterio,callback){
+		coleccion.find(criterio).toArray(function(err,usr){
+			if (usr.length==0){
+                callback(undefined);
+            }
+            else{
+                callback(usr[0]);
+            }
+		})
+	}
+
     //this.conectar(function(){})
 
 }

@@ -97,5 +97,26 @@ function ClienteRest(){
         });
     }
 
+    this.registrarUsuario=function(email,clave){
+		$.ajax({
+			type:'POST',
+			url:'/registrarUsuario',
+			data:{"email":email,"clave":clave},
+			success:function(data){
+				if (data.email){
+					//mostrarLogin
+					console.log(data.email);
+				}
+				else{
+					console.log("No se ha podido registrar")
+				}
+			},
+			//contentType:'application/json',
+			dataType:'json'
+		});
+	}
+
+    
+
 
 }

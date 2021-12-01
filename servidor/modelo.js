@@ -87,6 +87,40 @@ function Juego(){
         })
     }
 
+    this.registrarUsuario=function(email,clave,cb){
+        var ju=this;
+        var claveCifrada=cf.encryptStr(clave,'sEcrEtA');
+        var nick=email;
+
+        this.cad.encontrarUsuarioCriterio({email:email},function(usr){
+            if (!usr){
+                ju.cad.insertarUsuario({email:email,clave:claveCifrada,nick:nick},function(usu){
+                    cb({email:'ok'});
+                })
+            }
+            else{
+                cb({email:"nook"})
+            }
+        })
+    }
+
+
+this.loginUsuario=function(email,clave,cb){
+        var ju=this;
+        var nick=email;
+        this.cad.encontrarUsuarioCriterio({email:email},function(usr){
+            var clavedesCifrada=cf.decryptStr(usr.clave,'sEcrEtA');
+            if (usr && clave==clavedesCifrada){
+                cb(usr);
+                ju.agregarJugador(usr.nick);
+            }
+            else{
+               cb({nick:"nook"})
+            }
+        })
+    }
+
+
     this.cad.conectar(function(){});
 
 }// FIN JUEGO
@@ -103,6 +137,8 @@ function Jugador(nick,juego){
     this.mano=[];
     this.codigoPartida;
     this.puntos=0;
+    this.estado=new Normal();
+
     this.crearPartida=function(numJug){
         return this.juego.crearPartida(nick,numJug);
     }
@@ -168,7 +204,27 @@ function Jugador(nick,juego){
         this.juego.insertarResultado(resultado);
     }
 
+    this.recibeTurno=function(partida){
+        this.estado.recibeTurno(partida,this);
+    }
+
 }//FIN JUGADOR
+
+function Normal(){
+    this.recibeTurno=function(partida,jugador){
+        partida.jugadorPuedeJugar(jugador);
+    }
+
+}
+
+function Bloqueado(){
+    this.recibeTurno=function(partida,jugador){
+        jugador.pasarTurno();
+        jugador.estado=new Normal();
+
+    }
+
+}
 
 function Partida(codigo,jugador,numJug){
     this.codigo=codigo;
@@ -212,10 +268,10 @@ function Partida(codigo,jugador,numJug){
             this.mazo.push(new Cambio(20,colores[j]));
             //this.mazo.push(new Cambio(20,colores[j]));
         }
-        // for(j=0;j<colores.length;j++){
-        //     this.mazo.push(new Bloqueo(20,colores[j]));
-        //     this.mazo.push(new Bloqueo(20,colores[j]));
-        // }
+         for(j=0;j<colores.length;j++){
+             this.mazo.push(new Bloqueo(20,colores[j]));
+             this.mazo.push(new Bloqueo(20,colores[j]));
+         }
         // for(j=0;j<colores.length;j++){
         //     this.mazo.push(new Mas2(20,colores[j]));
         //     this.mazo.push(new Mas2(20,colores[j]));
@@ -259,6 +315,9 @@ function Partida(codigo,jugador,numJug){
             this.direccion.pasarTurno(this)
         }
     }
+   /* this.recibeTurno=function(){
+
+    }*/
     this.asignarTurno=function(){
         var nick=this.ordenTurno[0];
         this.turno=this.jugadores[nick];
@@ -311,6 +370,14 @@ function Partida(codigo,jugador,numJug){
         this.turno.puntos=suma;
     }
 
+    this.bloquearSiguiente=function(){
+        //obtener quie es el siguiente jugador (Dirección)
+        var jugador = this.direccion.obtenerSiguiente(this);
+        //y bloquearlo
+        jugador.estado=new Bloqueado();
+
+    }
+
     this.crearMazo();
     this.unirAPartida(jugador);
 } //fin objeto Partida
@@ -319,15 +386,20 @@ function Partida(codigo,jugador,numJug){
 function Derecha(){
     this.nombre="derecha";
     this.pasarTurno=function(partida){
-        //ver el nick del que tiene el turno
-        //calcular el indice en el array ordenTurno
-        //sumarle 1 al indice MOD longitud del array
-        //asignarle el turno al nuevo jugador
         var nick=partida.turno.nick;            
         var indice=partida.ordenTurno.indexOf(nick);            
         var siguiente=(indice+1)%(Object.keys(partida.jugadores).length);
-        partida.turno=partida.jugadores[partida.ordenTurno[siguiente]];
+        var jugador =partida.jugadores[partida.ordenTurno[siguiente]];
+        jugador.recibeTurno(partida);
     }
+    this.obtenerSiguiente=function(partida){
+        var nick=partida.turno.nick;            
+        var indice=partida.ordenTurno.indexOf(nick);            
+        var siguiente=(indice+1)%(Object.keys(partida.jugadores).length);
+        var jugador=partida.jugadores[partida.ordenTurno[siguiente]];
+        return jugador;
+    }
+
 }
 
 function Izquierda(){
@@ -337,7 +409,16 @@ function Izquierda(){
         var indice=partida.ordenTurno.indexOf(nick);            
         var siguiente=(indice-1)%(Object.keys(partida.jugadores).length);
         if (siguiente<0) {siguiente=Object.keys(partida.jugadores).length-1}
-        partida.turno=partida.jugadores[partida.ordenTurno[siguiente]];
+        var jugador=partida.jugadores[partida.ordenTurno[siguiente]];
+        jugador.recibeTurno(partida);
+    }
+    this.obtenerSiguiente=function(partida){
+        var nick=partida.turno.nick;            
+        var indice=partida.ordenTurno.indexOf(nick);            
+        var siguiente=(indice-1)%(Object.keys(partida.jugadores).length);
+        if (siguiente<0) {siguiente=Object.keys(partida.jugadores).length-1}
+        var jugador=partida.jugadores[partida.ordenTurno[siguiente]];
+        return jugador;
     }
 }
 
@@ -410,7 +491,7 @@ function Bloqueo(valor,color){
     this.color=color;
     this.valor=valor;
     this.comprobarEfecto=function(partida){
-        
+        partida.bloquearSiguiente();
     }    
 }
 

@@ -13,7 +13,7 @@ function ControlWeb(){
 
 	this.mostrarAgregarJugador = function() {
 
-        var cad = `<a href="/auth/google" class="btn btn-primary" a>`
+        //var cad = `<a href="/auth/google" class="btn btn-primary" a>`
         
         $("#btnAJ").on("click", function(){
             var nick = $("#usr").val()

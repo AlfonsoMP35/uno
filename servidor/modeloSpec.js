@@ -31,7 +31,7 @@ describe("El juego del UNO...", function() {
     });
 
     it("Comprobar mazo",function(){
-        expect(partida.mazo.length).toBe(24);
+        expect(partida.mazo.length).toBe(32);
         // var rojo=partida.mazo.filter(function(each){
         //   return each.color=="rojo";
         // });
