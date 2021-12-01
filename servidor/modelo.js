@@ -315,9 +315,10 @@ function Partida(codigo,jugador,numJug){
             this.direccion.pasarTurno(this)
         }
     }
-   /* this.recibeTurno=function(){
+   this.jugadorPuedeJugar=function(jugador){
+       this.turno=jugador;
+   }
 
-    }*/
     this.asignarTurno=function(){
         var nick=this.ordenTurno[0];
         this.turno=this.jugadores[nick];
