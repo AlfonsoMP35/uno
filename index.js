@@ -8,7 +8,8 @@ var { Server } = require("socket.io"); //Libreria de socket.io
 var io = new Server(http); //Conexión con el servidor HTTP
 
 var bodyParser = require("body-parser");
-var passport=require("passport");
+var passport=require("passport"); //midleware de la autentificación
+var localStrategy = require("passport-local").Strategy;
 var cookieSession = require("cookie-session");
 
 //Importaciones
@@ -27,6 +28,19 @@ app.use(cookieSession({
 	name:'unocartas', //nombre de la cookie
 	keys:["key1","key2"]
 }));
+
+passport.use(new localStrategy({usernameField:"email", passwordField:"clave"},
+	function(email,clave,done){
+		juego.loginUsuario(email,clave,function(err,user){
+			if (err){
+				return done(err)
+			}
+			else{
+				return done(null,user);
+			}
+		})
+	}
+))
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -95,7 +109,7 @@ app.get("/good",function(request,response){
 })
 
 app.get("/fallo",function(request,response){
-	response.send("No se pudo iniciar sesión");
+	response.send({nick:"nook"});
 
 });
 
@@ -112,7 +126,7 @@ app.post('/registrarUsuario',function(request,response){
 	});
 })
 
-app.post('/loginUsuario',function(request,response){
+/*app.post('/loginUsuario',function(request,response){
 	var email=request.body.email;
 	var clave=request.body.clave;
 
@@ -120,7 +134,15 @@ app.post('/loginUsuario',function(request,response){
 		response.send(data);
 	});
 })
+*/
 
+app.post("/loginUsuario", passport.authenticate("local",
+	{failureRedirect: "/fallo", successRedirect:"/ok"}
+));
+
+app.get("/ok",haIniciado,function(request,response){
+	response.send({nick:request.user.nick});
+})
 
 //unir a partida
 app.get("/unirAPartida/:code/:nick",haIniciado,function(request,response){

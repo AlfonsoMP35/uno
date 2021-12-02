@@ -187,6 +187,72 @@ describe("El juego del UNO...", function() {
 
         });
 
+        it("Ana juega una carta de bloqueo, pepe pierde el turno",function(){
+          var carta=ju1.mano[0];
+
+          while(!carta || carta.tipo!="bloqueo"){
+            carta=ju1.mano.find(function(el){ return el.tipo=="bloqueo"});
+            ju1.robar(1);
+          }
+          expect(carta.tipo).toEqual("bloqueo");
+
+          var ind=ju1.mano.indexOf(carta);
+          expect(ju1.mano[ind].tipo).toEqual("bloqueo");
+          partida.cartaActual.color=carta.color;
+          expect(partida.turno.nick).toEqual(ju1.nick);
+          ju1.jugarCarta(ind);
+          expect(partida.cartaActual.tipo).toEqual("bloqueo");
+          expect(partida.turno.nick).toEqual(ju1.nick);
+          expect(ju2.estado.nombre).toEqual("normal");
+
+
+        })
      });
   });
+
+  describe("Ana crea una partida de 2 jugadores...", function() {
+    var ju1,ju2,ju3;
+    var partida;
+
+    beforeEach(function(){
+      ju1=juego.usuarios["ana"];
+      partida=ju1.crearPartida(3);
+      ju2=juego.usuarios["pepe"];
+      ju3=juego.usuarios["luis"];
+      ju2.unirAPartida(partida.codigo);
+      ju3.unirAPartida(partida.codigo);
+      ju1.manoInicial();
+      ju2.manoInicial();
+      ju3.manoInicial();
+
+
+    });
+
+    it("codiciones iniciales", function(){
+      expect(partida.mazo.length).toBe(22);
+      var carta=ju1.mano[0];
+
+          while(!carta || carta.tipo!="bloqueo"){
+            carta=ju1.mano.find(function(el){ return el.tipo=="bloqueo"});
+            ju1.robar(1);
+          }
+          expect(carta.tipo).toEqual("bloqueo");
+
+          var ind=ju1.mano.indexOf(carta);
+          expect(ju1.mano[ind].tipo).toEqual("bloqueo");
+          partida.cartaActual.color=carta.color;
+          expect(partida.turno.nick).toEqual(ju1.nick);
+          ju1.jugarCarta(ind);
+          expect(partida.cartaActual.tipo).toEqual("bloqueo");
+          expect(ju1.mano.length).toEqual(num-1);
+          expect(partida.turno.nick).toEqual(ju1.nick);
+          expect(ju2.estado.nombre).toEqual("normal");
+
+    })
+
+
+
+
+  });
+
 });

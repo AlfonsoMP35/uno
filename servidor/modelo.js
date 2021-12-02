@@ -1,4 +1,6 @@
+var cf=require("./cifrado.js");
 var cad=require("./cad.js");
+var moduloEmail=require("./email.js");
 
 function Juego(){
     this.usuarios={};
@@ -91,12 +93,17 @@ function Juego(){
         var ju=this;
         var claveCifrada=cf.encryptStr(clave,'sEcrEtA');
         var nick=email;
+        var key=(new Date().valueOf()).toString();
 
         this.cad.encontrarUsuarioCriterio({email:email},function(usr){
             if (!usr){
-                ju.cad.insertarUsuario({email:email,clave:claveCifrada,nick:nick},function(usu){
+                ju.cad.insertarUsuario({email:email,clave:claveCifrada,key:key,nick:nick,confirmada:false},function(usu){
                     cb({email:'ok'});
-                })
+                });
+                //enviafr un email a la cuenta con un enlace de confirmacion
+                moduloEmail.enviarEmailConfirmacion(email,key);
+
+
             }
             else{
                 cb({email:"nook"})
@@ -105,20 +112,27 @@ function Juego(){
     }
 
 
-this.loginUsuario=function(email,clave,cb){
+    this.loginUsuario=function(email,clave,cb){
         var ju=this;
         var nick=email;
         this.cad.encontrarUsuarioCriterio({email:email},function(usr){
-            var clavedesCifrada=cf.decryptStr(usr.clave,'sEcrEtA');
-            if (usr && clave==clavedesCifrada){
-                cb(usr);
-                ju.agregarJugador(usr.nick);
+            if (usr){
+                var clavedesCifrada=cf.decryptStr(usr.clave,'cLaVeSecrEtA');
+                if (clave==clavedesCifrada && usr.confirmada){
+                    cb(null,usr);
+                    ju.agregarJugador(usr.nick);
+                    console.log("Usuario "+usr.nick+" inicia sesión")
+                }
+                else{
+                   cb(null)
+                }
             }
             else{
-               cb({nick:"nook"})
+                cb(null)
             }
         })
     }
+
 
 
     this.cad.conectar(function(){});
@@ -208,9 +222,14 @@ function Jugador(nick,juego){
         this.estado.recibeTurno(partida,this);
     }
 
+    this.bloquear=function(){
+        this.estado=new Bloqueado();
+    }
+
 }//FIN JUGADOR
 
 function Normal(){
+    this.nombre="normal";
     this.recibeTurno=function(partida,jugador){
         partida.jugadorPuedeJugar(jugador);
     }
@@ -218,7 +237,9 @@ function Normal(){
 }
 
 function Bloqueado(){
+    this.nombre="bloqueado";
     this.recibeTurno=function(partida,jugador){
+        partida.jugadorPuedeJugar(jugador);
         jugador.pasarTurno();
         jugador.estado=new Normal();
 
@@ -343,7 +364,8 @@ function Partida(codigo,jugador,numJug){
     this.comprobarCarta=function(carta){
         //comprobar que la carta que se puede jugar la carta, según la que hay en la mesa
         return (this.cartaActual.tipo=="numero" && (this.cartaActual.color==carta.color || this.cartaActual.valor==carta.valor)
-            || this.cartaActual.tipo=="cambio" && (this.cartaActual.color==carta.color || this.cartaActual.tipo == carta.tipo))
+            || this.cartaActual.tipo=="cambio" && (this.cartaActual.color==carta.color || this.cartaActual.tipo == carta.tipo)
+            || this.cartaActual.tipo=="bloqueo" && (this.cartaActual.color==carta.color || this.cartaActual.tipo == carta.tipo))
     }
     this.cartaInicial=function(){
         this.cartaActual=this.asignarUnaCarta();
@@ -375,7 +397,7 @@ function Partida(codigo,jugador,numJug){
         //obtener quie es el siguiente jugador (Dirección)
         var jugador = this.direccion.obtenerSiguiente(this);
         //y bloquearlo
-        jugador.estado=new Bloqueado();
+        jugador.bloquear();
 
     }
 
